@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaNote｜プロトタイプ v3.13.7</title>
+<title>UtaNote｜プロトタイプ v3.13.8</title>
 <style>
 :root{color-scheme:light;--ink:#2d2a48;--muted:#716e89;--purple:#7058d7;--purple2:#947bed;--pink:#ec759a;--aqua:#239f9a;--bg:#f8f7fe;--line:#e7e3f3;--paper:#fff;--focus:#dae5ff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 65% 24% at 5% 0%,#e6e5ff 0,transparent 100%),radial-gradient(ellipse 45% 33% at 100% 6%,#ffe8ee 0,transparent 100%),var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:var(--ink);line-height:1.6}button,input,textarea{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #a7a1f8;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:890px;margin:0 auto;padding:22px clamp(14px,3vw,30px) 78px}.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:30px}.logo{display:flex;align-items:center;gap:11px}.logo-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;color:white;font-size:27px;background:linear-gradient(135deg,#7563e9 8%,#ed7ba6 92%);transform:rotate(-8deg);box-shadow:0 10px 22px #7256ba2c}.logotype{font-size:22px;font-weight:850;letter-spacing:-.06em;line-height:1}.logo small{display:block;margin-bottom:5px;color:#877eaa;font-size:9px;letter-spacing:.19em;font-weight:800}.head-right{display:flex;align-items:center;gap:8px}.top-btn{border:1px solid #ddd7f0;background:#ffffffb9;color:#615888;border-radius:99px;font-size:12px;font-weight:750;padding:8px 12px;white-space:nowrap}.hero{position:relative;margin-bottom:18px}.eyebrow{color:#806db7;font-size:11px;font-weight:800;letter-spacing:.12em}.hero h1{font-size:clamp(25px,4.5vw,39px);line-height:1.3;letter-spacing:-.055em;margin:6px 0}.hero h1 em{font-style:normal;color:var(--purple)}.hero p{color:var(--muted);font-size:13px;margin:7px 0 0}.star{position:absolute;right:12px;top:0;font-size:30px;color:#e9a6b8;transform:rotate(15deg);pointer-events:none}.tutorial{background:linear-gradient(115deg,#f0ebff,#f9eff9);border:1px solid #ded4fa;border-radius:18px;padding:14px 16px;margin:16px 0;box-shadow:0 7px 20px #7862cc0b}.tutorial-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.tutorial strong{font-size:13px}.tutorial p{margin:5px 0 9px;font-size:12px;color:#665780}.tutorial .tour-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.dots{display:flex;gap:5px}.dot{width:18px;height:5px;border-radius:99px;background:#ded0fa}.dot.active{background:#846bdf}.link-btn{border:0;background:transparent;color:var(--purple);padding:4px;font-size:12px;font-weight:750}.workspace{background:white;border:1px solid #e5def1;border-radius:25px;box-shadow:0 16px 45px #62559e12;overflow:hidden;position:relative}.workspace:before{content:"";position:absolute;height:4px;top:0;left:0;right:0;background:linear-gradient(90deg,#7366ed,#7ab7e7,#4bd5c2,#f2b0c8)}.workspace-head{padding:22px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid #f0edf7}.workspace-meta{font-size:10px;color:#8d87a1;letter-spacing:.12em;font-weight:800}.workspace-head h2{margin:3px 0 0;font-size:17px;letter-spacing:-.02em}.spark{display:inline-block;color:#f3a14c}.mode-switch{display:inline-flex;border-radius:99px;padding:4px;background:#f3f1fa;gap:3px;flex-shrink:0}.mode-switch button{border:0;background:transparent;color:#746d91;border-radius:99px;font-size:12px;font-weight:750;padding:9px 13px;transition:background .15s,box-shadow .15s,transform .15s;white-space:nowrap}.mode-switch button[aria-pressed="true"]{background:white;color:#6650c4;box-shadow:0 2px 7px #52467b19}.mode-switch button:active{transform:scale(.97)}.note-caption{display:flex;align-items:center;gap:8px;background:#faf8ff;border-bottom:1px solid #f2edf7;color:#807a99;padding:10px 24px;font-size:11px}.pulse{width:8px;height:8px;background:#66c6af;border-radius:99px;box-shadow:0 0 0 4px #def6f1}.lyrics{padding:32px 24px 25px;min-height:205px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}.lyric-row{padding:6px 0 8px;border-bottom:1px dashed #f5f1f9}.lyric-row:last-child{border-bottom:0}.lyric-text{font-size:clamp(19px,3.7vw,27px);line-height:2.05;letter-spacing:.035em;font-weight:600;overflow-wrap:anywhere}.char{position:relative;display:inline;white-space:pre;padding:5px 0;cursor:pointer;border-radius:4px;transition:background .14s,box-shadow .14s;-webkit-tap-highlight-color:transparent}.char.marked{background:linear-gradient(transparent 72%,#ded5fa 72%)}.char.memoed{background:linear-gradient(transparent 72%,#ffe0e9 72%)}.char.selected{background:#d5e8ff;box-shadow:0 0 0 1px #a1cbfa inset;color:#2b5084}.char:active{background:#c6dcfa}.char.new{animation:markflash .45s ease-out}.range-ribbon{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:3px 0 2px;min-height:3px}.range-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:#f0ecff;color:#6754ba;border:1px solid #e6dafa;border-radius:8px;font-size:11px;font-weight:750;max-width:100%}.range-chip.note{background:#fff0f5;color:#bb4e78;border-color:#ffe0e9}.range-chip .fragment{max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6d6880;font-weight:500}.blank{color:#bcb7ca;padding:4px 0}.selection-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;margin-top:15px;border:1px solid #e1dcf4;background:#f6f3ff;border-radius:15px;min-height:56px}.selection-bar p{margin:0;line-height:1.5;font-size:12px;font-weight:700;color:#5e5583;flex:1}.selected-sample{color:#5542b3}.mini-btn{border:1px solid #d9d0f3;color:#6c57bd;background:white;padding:8px 11px;border-radius:10px;font-weight:750;font-size:11px;white-space:nowrap}.panel{border:1px solid #e9e4f2;background:white;border-radius:20px;margin-top:16px;padding:19px;box-shadow:0 7px 23px #594d8310}.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}.panel h3{font-size:14px;margin:0}.panel-head small{color:#9a94a9;font-size:11px}.symbol-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.symbol{border:1px solid #e9ddf8;min-height:68px;border-radius:15px;background:linear-gradient(150deg,#fcfaff,#f7f4ff);color:#6552ba;padding:10px 3px 8px;font-size:22px;font-weight:850;transition:transform .15s,background .15s,box-shadow .15s}.symbol:nth-child(3n + 2){background:linear-gradient(150deg,#fff9fb,#fff2f7);color:#c6597e;border-color:#f8e0ea}.symbol:nth-child(3n){background:linear-gradient(150deg,#f7fffe,#eefcf9);color:#239d92;border-color:#d5efea}.symbol small{display:block;font-size:10px;font-weight:650;margin-top:2px;color:#867f99}.symbol:hover{transform:translateY(-2px);box-shadow:0 6px 14px #6b5cb417}.symbol:active{transform:scale(.96)}.helptext{margin:12px 0 0;font-size:11px;color:var(--muted)}.memo-editor{display:flex;flex-direction:column;gap:9px}.memo-editor textarea{width:100%;min-height:98px;resize:vertical;padding:12px;border:1px solid #e5ddf1;border-radius:12px;color:var(--ink);background:#fffbfd;font-size:13px}.primary{border:0;background:linear-gradient(125deg,#6b5de6,#9572e9);color:white;border-radius:12px;padding:11px 16px;font-size:12px;font-weight:800;box-shadow:0 5px 12px #7861cc30}.line-btn{border:1px solid #e3daef;background:white;border-radius:12px;padding:10px 12px;font-size:11px;font-weight:750;color:#675b86}.memo-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center}.entry-list{display:flex;flex-direction:column}.entry{padding:12px 0;border-top:1px solid #f2eff6}.entry:first-child{border-top:none;padding-top:1px}.entry-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.entry-source{font-size:13px;font-weight:700;color:#43405d}.entry-index{font-size:10px;font-weight:700;color:#b4adc2;margin-right:6px}.entry-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tag{display:inline-flex;align-items:center;gap:6px;padding:4px 7px 4px 9px;border-radius:9px;background:#f1edfe;color:#6451b8;font-size:12px;font-weight:800}.tag button{border:0;background:#e0d6fb;border-radius:6px;min-width:23px;min-height:23px;color:#5e47b4;font-size:13px;line-height:1}.entry-note{font-size:13px;white-space:pre-wrap;margin-top:7px;border-left:3px solid #f2a8bf;padding:4px 0 4px 10px;color:#6a5270}.entry-tools{display:flex;align-items:center;gap:8px}.entry-tools button{border:0;background:#f6f3fb;border-radius:8px;color:#766a95;padding:6px 9px;font-size:11px;font-weight:750}.empty{font-size:12px;color:#9690a3;margin:6px 0}.footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:15px 0;color:#8a849f;font-size:11px}.footer-left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.footer button{border:0;background:none;padding:5px;color:#7166a3;text-decoration:underline;font-size:11px}.data-tools{display:flex;gap:7px;flex-wrap:wrap}.data-tools button{border:1px solid #e6e0f1;background:white;border-radius:10px;color:#766998;padding:8px 10px;font-weight:700;font-size:11px}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#38314f;color:#fff;padding:11px 18px;border-radius:30px;box-shadow:0 12px 25px #2d25413c;font-size:12px;max-width:90%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;transition:opacity .18s,transform .18s;z-index:5}.toast.show{transform:translate(-50%,0);opacity:1}.edit-lyrics{display:none;background:#f6f3fe;border-top:1px solid #e8e0f4;padding:18px 24px}.edit-lyrics.open{display:block}.edit-lyrics textarea{width:100%;min-height:135px;border:1px solid #dcd5ed;border-radius:13px;padding:12px;font-size:14px;resize:vertical;color:var(--ink)}.edit-lyrics p{color:var(--muted);font-size:11px}.edit-actions{display:flex;gap:8px;justify-content:flex-end}.selection-tip{display:none;font-size:11px;color:#9f5783;font-weight:750}.edit-active .selection-tip{display:block}@keyframes markflash{0%{box-shadow:0 0 0 0 #9f7aecaa}45%{box-shadow:0 0 0 5px #ab8dec66}100%{box-shadow:0 0 0 0 transparent}}@media(max-width:610px){.app{padding-top:15px}.head{margin-bottom:21px}.hero{margin-bottom:16px}.workspace-head{padding:17px 14px 13px;flex-wrap:wrap}.note-caption{padding:9px 14px}.lyrics{padding:24px 14px 18px}.symbol-grid{gap:6px}.symbol{font-size:19px;min-height:63px;border-radius:12px}.panel{padding:14px}.mode-switch button{padding:8px 11px}.logo small{font-size:8px}.range-chip{font-size:10px}.edit-lyrics{padding:14px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -241,13 +241,13 @@
 }
 
 
-/* v3.13.7: compact one-character accents so adjacent accents align horizontally. */
+/* v3.13.8: compact one-character accents so adjacent accents align horizontally. */
 .inline-annotation.single-glyph.accent-only{
-  width:11px;
-  min-width:11px;
-  max-width:11px;
-  height:17px;
-  min-height:17px;
+  width:8px;
+  min-width:8px;
+  max-width:8px;
+  height:15px;
+  min-height:15px;
   padding:0;
   border:0;
   border-radius:0;
@@ -264,7 +264,7 @@
   min-width:0;
   min-height:15px;
   padding:0;
-  font-size:12px;
+  font-size:10px;
   line-height:1;
 }
 .inline-annotation.single-glyph.accent-only::after{
@@ -759,7 +759,9 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Symbols and free-form pronunciation share a compact group above their annotated lyric.
   const combos=new Map();
   displayMarks(data.marks).filter(m=>mode==='marks'&&m.start<=row.end&&m.end>=row.start).forEach(m=>{
-    const k=rangeKey(m);if(!combos.has(k))combos.set(k,{start:m.start,end:m.end,marks:[],prons:[],memos:[]});
+    // Keep accent independent per character, even when other symbols share the range.
+    const k=m.symbol==='・'?'accent:'+rangeKey(m):rangeKey(m);
+    if(!combos.has(k))combos.set(k,{start:m.start,end:m.end,marks:[],prons:[],memos:[]});
     combos.get(k).marks.push(m)
   });
   data.prons.filter(m=>mode==='marks'&&m.start<=row.end&&m.end>=row.start).forEach(m=>{
@@ -813,13 +815,23 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   located.forEach((items,v)=>{
    const shellWidth=v.shell.clientWidth,lanes=[];
    items.sort((a,b)=>a.start-b.start||a.end-b.end);
-   items.forEach(item=>{
-     const width=Math.min(Math.max(item.annotation.getBoundingClientRect().width,item.annotation.classList.contains('single-glyph')?12:28),shellWidth-4);
+   // Place accents on one baseline, even when adjacent letters are narrower than the icon.
+   // Reserve this lane first so larger annotations move above accents when overlapping.
+   const ordered=[...items].sort((a,b)=>Number(b.annotation.classList.contains('accent-only'))-Number(a.annotation.classList.contains('accent-only')));
+   ordered.forEach(item=>{
+     const isAccent=item.annotation.classList.contains('accent-only');
+     const width=Math.min(Math.max(item.annotation.getBoundingClientRect().width,isAccent?6:item.annotation.classList.contains('single-glyph')?12:28),shellWidth-4);
      const center=Math.min(Math.max(item.center,width/2+2),shellWidth-width/2-2);
      const left=center-width/2,right=center+width/2;
      let lane=0;
-     while(lanes[lane]?.some(interval=>{const space=item.annotation.classList.contains('single-glyph')&&interval.compact?1:5;return left<interval.right+space&&right>interval.left-space}))lane++;
-     (lanes[lane]??=[]).push({left,right,compact:item.annotation.classList.contains('single-glyph')});item.lane=lane;item.center=center
+     if(!isAccent){
+       while(lanes[lane]?.some(interval=>{
+         const space=item.annotation.classList.contains('single-glyph')&&interval.compact?1:5;
+         return left<interval.right+space&&right>interval.left-space;
+       }))lane++;
+     }
+     (lanes[lane]??=[]).push({left,right,compact:item.annotation.classList.contains('single-glyph')});
+     item.lane=lane;item.center=center;
    });
    const heights=lanes.map((_,lane)=>Math.max(...items.filter(item=>item.lane===lane).map(item=>item.annotation.offsetHeight)));
    const gap=5,clearance=6;
