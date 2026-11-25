@@ -437,6 +437,7 @@
   <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom <span style="font-size:10px;font-weight:650;color:#a79fc2">v3.14.7 · 仮称</span></div></div></div>
     <div class="head-right top-quick-actions"><button class="nav-btn" id="nav-library" type="button">♫ 曲一覧</button><button class="nav-btn" id="nav-quick" type="button">♫ キーをメモ</button><button class="nav-btn nav-primary" id="nav-new" type="button">＋ 新規登録</button><button class="top-btn" id="guide-again" type="button" hidden>? 使い方</button><button class="top-btn" id="edit-open" type="button" hidden>✎ 曲・歌詞編集</button></div></header>
   <section id="library-view" class="page-view" aria-label="曲一覧">
+<div class="library-tip" role="status">セクション分け機能の試用版です。通常版とは別のブラウザ保存領域を使用します。通常版の曲を試す場合はJSONバックアップを読み込んでください。</div>
     <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>歌詞に想いを重ねて、自分らしい歌を育てよう。</p></div>
     <div class="library-head"><h2>♫ マイソング</h2><span class="library-count" id="library-count">0 曲</span></div>
     <div class="library-search" role="search" aria-label="登録曲を検索">
@@ -605,7 +606,7 @@
 (function(){
 'use strict';
 const KEY='utanote-prototype-v3'; // legacy v3.5 key (never overwritten)
-const LIBRARY_KEY='utanote-prototype-v36-library';
+const LIBRARY_KEY='utabloom-section-preview-v3147-library';
 const GUIDE_KEY='utanote-guide-v3';
 const DEFAULT='窓の向こうで光が揺れる\n昨日の迷いも歌になって\n今夜の空へ声を放とう';
 const $=id=>document.getElementById(id);
