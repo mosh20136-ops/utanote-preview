@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.12</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.13</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -56,6 +56,9 @@
 /* v3.4: inhalation is an insertion point, while whisper is a range mark. */
 .breath-editor{margin-top:15px;border-top:1px dashed #eae5f4;padding-top:14px}
 .breath-editor .panel-head{margin-bottom:7px}
+.mark-help{margin:0 0 12px}
+.breath-help{margin:0 0 10px}
+.breath-editor .separator-toggle{margin-top:9px}
 .breath-toggle{border:1px solid #abd9d3;border-radius:11px;background:#eaf8f6;color:#126e6a;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer}
 .breath-toggle[aria-pressed="true"]{background:#177b76;color:white;border-color:#177b76}
 .breath-gap{display:inline-block;width:0;height:1em;line-height:1;vertical-align:baseline;border:0;margin:0;padding:0;color:#15867d;background:transparent;overflow:hidden;font-size:.58em;font-weight:900;cursor:default;white-space:nowrap;position:relative;top:-.13em;border-radius:5px;-webkit-tap-highlight-color:transparent}
@@ -407,7 +410,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.12: section navigation */
+/* v3.14.13: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -547,6 +550,8 @@
       <button type="button" data-symbol="↗" title="上げる">↗</button><button type="button" data-symbol="↘" title="下げる">↘</button>
       <button type="button" data-symbol="息" title="ウィスパー">息</button><button type="button" data-symbol="強" title="強調">強</button>
       <button type="button" data-symbol="〜" title="ロングトーン">〜</button><button type="button" data-symbol="〰" title="ビブラート">〰</button><button type="button" data-symbol="・" title="範囲内の各文字にアクセント">・</button>
+      <button type="button" data-symbol="＜" title="クレッシェンド（だんだん強く）" aria-label="クレッシェンド・だんだん強く">＜</button>
+      <button type="button" data-symbol="＞" title="デクレッシェンド（だんだん弱く）" aria-label="デクレッシェンド・だんだん弱く">＞</button>
       <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
       <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
     </div>
@@ -586,12 +591,13 @@
   <div class="selection-bar" role="status" aria-live="polite"><div><p id="selection-status">まず歌詞の開始文字をタップしてね。</p><div class="selection-tip" id="edit-message"></div></div><button class="mini-btn" type="button" id="clear">選択を解除</button></div>
 
   <section class="panel" id="editor-panel">
-    <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3><small>何個でも追加OK・「・」は各文字へ</small></div><div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button></div><p class="helptext">「息」はウィスパー、「強」は強調。どちらも歌詞の文字色で表現し、上の記号や下線は表示しません。息継ぎは「ブレスを挿入」で設定します。</p>
-      <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎの位置）</h3><small>行の先頭・末尾・文字間に挿入</small></div>
+    <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3></div>
+      <p class="helptext mark-help">文字ごとに設定できます。</p>
+      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜" title="クレッシェンド（だんだん強く）">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞" title="デクレッシェンド（だんだん弱く）">＞<small>だんだん弱く</small></button></div>
+      <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎ）とフレージング（区切り）</h3></div>
+        <p class="helptext breath-help">行頭・行末・文字間をタップして、追加・解除できます。</p>
         <button type="button" id="breath-toggle" class="breath-toggle" aria-pressed="false">＋ ブレスを挿入</button>
-        <p class="helptext">オンにすると、各行の先頭・末尾と文字間に「＋」が表示されます。タップすると「∨」を挿入し、もう一度タップすると解除できます。</p>
-        <button type="button" id="separator-toggle" class="separator-toggle" aria-pressed="false">＋ / 区切りを挿入</button>
-        <p class="helptext">「/」はフレーズの区切りです。行頭・行末・文字間をタップして追加・解除できます。</p>
+        <button type="button" id="separator-toggle" class="separator-toggle" aria-pressed="false">＋ 区切りを挿入</button>
       </div>
       <div class="pron-editor"><div class="panel-head"><h3>あ 発音の注釈</h3><small>読み方・歌うときの発音</small></div>
         <label for="pron-input">選択範囲に付ける発音のヒント</label>
@@ -636,7 +642,9 @@ const MARK_STYLE={
  '強':{color:'#a15e17',bg:'#fff3e5',border:'#f2dfc0'},
  '〜':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
  '〰':{color:'#7d4caa',bg:'#f5efff',border:'#e2d1f6'},
- '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'}
+ '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'},
+ '＜':{color:'#277f65',bg:'#eaf8f0',border:'#cde9dd'},
+ '＞':{color:'#b45c3a',bg:'#fff2ea',border:'#f2dbcc'}
 };
 function applyTone(el,symbol){const t=MARK_STYLE[symbol];if(!t)return;el.dataset.tone=symbol;el.style.setProperty('--tone',t.color);el.style.setProperty('--tone-bg',t.bg);el.style.setProperty('--tone-line',t.border)}
 document.querySelectorAll('[data-symbol]').forEach(b=>applyTone(b,b.dataset.symbol));
@@ -668,7 +676,7 @@ function normalizedSections(items,text){
    });
  return out;
 }
-function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','〜','〰','・'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
+function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','〜','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
 function refreshStorageStatus(){
  const library=$('library-storage-note');
  const quick=$('quick-storage-status');
@@ -1086,7 +1094,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Distant annotations reuse the lowest lane instead of floating above empty rows.
   located.forEach((items,v)=>{
     const rank={pron:0,accent:1,mark:2,memo:0};
-    const symbolOrder=['↗','↘','息','強','〜','〰'];
+    const symbolOrder=['↗','↘','息','強','〜','〰','＜','＞'];
     const placed=[];
     const intersects=(a,b)=>a.start<=b.end&&b.start<=a.end;
     const ordered=[...items].sort((a,b)=>rank[a.kind]-rank[b.kind]
@@ -1159,7 +1167,7 @@ function renderToolbar(){
  $('breath-toggle').setAttribute('aria-pressed',String(breathMode));
  $('breath-toggle').textContent=breathMode?'✓ ブレス挿入を終了':'＋ ブレスを挿入';
  $('separator-toggle').setAttribute('aria-pressed',String(separatorMode));
- $('separator-toggle').textContent=separatorMode?'✓ / 区切り挿入を終了':'＋ / 区切りを挿入';
+ $('separator-toggle').textContent=separatorMode?'✓ 区切り挿入を終了':'＋ 区切りを挿入';
  $('quick-breath').setAttribute('aria-pressed',String(breathMode));
  $('quick-separator').setAttribute('aria-pressed',String(separatorMode));
  const insertionActive=breathMode||separatorMode;
@@ -1204,7 +1212,7 @@ function renderSelectionInspector(){
   empty.textContent='この範囲にはまだ注釈がありません';
   box.appendChild(empty);
  }
- const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','〜':'ロングトーン','〰':'ビブラート','・':'アクセント'};
+ const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','〜':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
  for(const item of nearby){
   const scope=document.createElement('div');scope.className='scoped-annotation';
   const label=document.createElement('span');label.className='scope-label';
@@ -1294,7 +1302,7 @@ $('selection-annotations').addEventListener('click',event=>{
 
 // v3.10 direct edit: actual saved records stay separate even when visually connected.
 let quickEditRange=null,quickEditAnchor=null;
-const QUICK_SYMBOLS=['↗','↘','息','強','〜','〰','・'];
+const QUICK_SYMBOLS=['↗','↘','息','強','〜','〰','・','＜','＞'];
 function closeQuickEdit(){quickEditRange=null;quickEditAnchor=null;$('quick-edit').hidden=true}
 function quickItems(){
  if(!quickEditRange)return [];
@@ -1336,7 +1344,7 @@ function showQuickEdit(){
       }else{data.marks.splice(pos,1)}
      });
      showQuickEdit();toast('記号を変更しました');
-    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(symbol==='・'?'アクセント':'「'+symbol+'」')+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
+    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」')+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
    }
    section.append(buttons)
   }else{
@@ -1418,7 +1426,7 @@ function renderList(){
   header.append(label,actions);row.appendChild(header);
   if(mode==='marks'){
    const tags=document.createElement('div');tags.className='entry-tags';
-   const symbolOrder=['↗','↘','息','強','〜','〰','・'];
+   const symbolOrder=['↗','↘','息','強','〜','〰','・','＜','＞'];
    g.items.filter(item=>item.symbol).slice().sort((a,b)=>symbolOrder.indexOf(a.symbol)-symbolOrder.indexOf(b.symbol)).forEach(item=>{
      const chip=document.createElement('span');chip.className='tag';applyTone(chip,item.symbol);
      const edit=document.createElement('button');edit.type='button';edit.textContent=item.symbol+' ✎';edit.title='この記号を変更';edit.dataset.editId=item.id;
