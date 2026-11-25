@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaNote｜プロトタイプ v3.14.5</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.6</title>
+<meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
+<meta name="application-name" content="UtaBloom">
+<meta name="apple-mobile-web-app-title" content="UtaBloom">
+<meta property="og:type" content="website">
+<meta property="og:title" content="UtaBloom（仮称）｜Sing Your Song">
+<meta property="og:description" content="あなたの歌を、あなたらしく花開かせる。歌詞に歌唱記号やメモを付けられる歌唱ノート。">
+<meta name="twitter:card" content="summary">
 <style>
 :root{color-scheme:light;--ink:#2d2a48;--muted:#716e89;--purple:#7058d7;--purple2:#947bed;--pink:#ec759a;--aqua:#239f9a;--bg:#f8f7fe;--line:#e7e3f3;--paper:#fff;--focus:#dae5ff}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 65% 24% at 5% 0%,#e6e5ff 0,transparent 100%),radial-gradient(ellipse 45% 33% at 100% 6%,#ffe8ee 0,transparent 100%),var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:var(--ink);line-height:1.6}button,input,textarea{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #a7a1f8;outline-offset:2px}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:890px;margin:0 auto;padding:22px clamp(14px,3vw,30px) 78px}.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:30px}.logo{display:flex;align-items:center;gap:11px}.logo-icon{width:43px;height:43px;display:grid;place-items:center;border-radius:15px;color:white;font-size:27px;background:linear-gradient(135deg,#7563e9 8%,#ed7ba6 92%);transform:rotate(-8deg);box-shadow:0 10px 22px #7256ba2c}.logotype{font-size:22px;font-weight:850;letter-spacing:-.06em;line-height:1}.logo small{display:block;margin-bottom:5px;color:#877eaa;font-size:9px;letter-spacing:.19em;font-weight:800}.head-right{display:flex;align-items:center;gap:8px}.top-btn{border:1px solid #ddd7f0;background:#ffffffb9;color:#615888;border-radius:99px;font-size:12px;font-weight:750;padding:8px 12px;white-space:nowrap}.hero{position:relative;margin-bottom:18px}.eyebrow{color:#806db7;font-size:11px;font-weight:800;letter-spacing:.12em}.hero h1{font-size:clamp(25px,4.5vw,39px);line-height:1.3;letter-spacing:-.055em;margin:6px 0}.hero h1 em{font-style:normal;color:var(--purple)}.hero p{color:var(--muted);font-size:13px;margin:7px 0 0}.star{position:absolute;right:12px;top:0;font-size:30px;color:#e9a6b8;transform:rotate(15deg);pointer-events:none}.tutorial{background:linear-gradient(115deg,#f0ebff,#f9eff9);border:1px solid #ded4fa;border-radius:18px;padding:14px 16px;margin:16px 0;box-shadow:0 7px 20px #7862cc0b}.tutorial-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.tutorial strong{font-size:13px}.tutorial p{margin:5px 0 9px;font-size:12px;color:#665780}.tutorial .tour-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.dots{display:flex;gap:5px}.dot{width:18px;height:5px;border-radius:99px;background:#ded0fa}.dot.active{background:#846bdf}.link-btn{border:0;background:transparent;color:var(--purple);padding:4px;font-size:12px;font-weight:750}.workspace{background:white;border:1px solid #e5def1;border-radius:25px;box-shadow:0 16px 45px #62559e12;overflow:hidden;position:relative}.workspace:before{content:"";position:absolute;height:4px;top:0;left:0;right:0;background:linear-gradient(90deg,#7366ed,#7ab7e7,#4bd5c2,#f2b0c8)}.workspace-head{padding:22px 24px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:1px solid #f0edf7}.workspace-meta{font-size:10px;color:#8d87a1;letter-spacing:.12em;font-weight:800}.workspace-head h2{margin:3px 0 0;font-size:17px;letter-spacing:-.02em}.spark{display:inline-block;color:#f3a14c}.mode-switch{display:inline-flex;border-radius:99px;padding:4px;background:#f3f1fa;gap:3px;flex-shrink:0}.mode-switch button{border:0;background:transparent;color:#746d91;border-radius:99px;font-size:12px;font-weight:750;padding:9px 13px;transition:background .15s,box-shadow .15s,transform .15s;white-space:nowrap}.mode-switch button[aria-pressed="true"]{background:white;color:#6650c4;box-shadow:0 2px 7px #52467b19}.mode-switch button:active{transform:scale(.97)}.note-caption{display:flex;align-items:center;gap:8px;background:#faf8ff;border-bottom:1px solid #f2edf7;color:#807a99;padding:10px 24px;font-size:11px}.pulse{width:8px;height:8px;background:#66c6af;border-radius:99px;box-shadow:0 0 0 4px #def6f1}.lyrics{padding:32px 24px 25px;min-height:205px;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}.lyric-row{padding:6px 0 8px;border-bottom:1px dashed #f5f1f9}.lyric-row:last-child{border-bottom:0}.lyric-text{font-size:clamp(19px,3.7vw,27px);line-height:2.05;letter-spacing:.035em;font-weight:600;overflow-wrap:anywhere}.char{position:relative;display:inline;white-space:pre;padding:5px 0;cursor:pointer;border-radius:4px;transition:background .14s,box-shadow .14s;-webkit-tap-highlight-color:transparent}.char.marked{background:linear-gradient(transparent 72%,#ded5fa 72%)}.char.memoed{background:linear-gradient(transparent 72%,#ffe0e9 72%)}.char.selected{background:#d5e8ff;box-shadow:0 0 0 1px #a1cbfa inset;color:#2b5084}.char:active{background:#c6dcfa}.char.new{animation:markflash .45s ease-out}.range-ribbon{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:3px 0 2px;min-height:3px}.range-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;background:#f0ecff;color:#6754ba;border:1px solid #e6dafa;border-radius:8px;font-size:11px;font-weight:750;max-width:100%}.range-chip.note{background:#fff0f5;color:#bb4e78;border-color:#ffe0e9}.range-chip .fragment{max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6d6880;font-weight:500}.blank{color:#bcb7ca;padding:4px 0}.selection-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;margin-top:15px;border:1px solid #e1dcf4;background:#f6f3ff;border-radius:15px;min-height:56px}.selection-bar p{margin:0;line-height:1.5;font-size:12px;font-weight:700;color:#5e5583;flex:1}.selected-sample{color:#5542b3}.mini-btn{border:1px solid #d9d0f3;color:#6c57bd;background:white;padding:8px 11px;border-radius:10px;font-weight:750;font-size:11px;white-space:nowrap}.panel{border:1px solid #e9e4f2;background:white;border-radius:20px;margin-top:16px;padding:19px;box-shadow:0 7px 23px #594d8310}.panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}.panel h3{font-size:14px;margin:0}.panel-head small{color:#9a94a9;font-size:11px}.symbol-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.symbol{border:1px solid #e9ddf8;min-height:68px;border-radius:15px;background:linear-gradient(150deg,#fcfaff,#f7f4ff);color:#6552ba;padding:10px 3px 8px;font-size:22px;font-weight:850;transition:transform .15s,background .15s,box-shadow .15s}.symbol:nth-child(3n + 2){background:linear-gradient(150deg,#fff9fb,#fff2f7);color:#c6597e;border-color:#f8e0ea}.symbol:nth-child(3n){background:linear-gradient(150deg,#f7fffe,#eefcf9);color:#239d92;border-color:#d5efea}.symbol small{display:block;font-size:10px;font-weight:650;margin-top:2px;color:#867f99}.symbol:hover{transform:translateY(-2px);box-shadow:0 6px 14px #6b5cb417}.symbol:active{transform:scale(.96)}.helptext{margin:12px 0 0;font-size:11px;color:var(--muted)}.memo-editor{display:flex;flex-direction:column;gap:9px}.memo-editor textarea{width:100%;min-height:98px;resize:vertical;padding:12px;border:1px solid #e5ddf1;border-radius:12px;color:var(--ink);background:#fffbfd;font-size:13px}.primary{border:0;background:linear-gradient(125deg,#6b5de6,#9572e9);color:white;border-radius:12px;padding:11px 16px;font-size:12px;font-weight:800;box-shadow:0 5px 12px #7861cc30}.line-btn{border:1px solid #e3daef;background:white;border-radius:12px;padding:10px 12px;font-size:11px;font-weight:750;color:#675b86}.memo-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center}.entry-list{display:flex;flex-direction:column}.entry{padding:12px 0;border-top:1px solid #f2eff6}.entry:first-child{border-top:none;padding-top:1px}.entry-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.entry-source{font-size:13px;font-weight:700;color:#43405d}.entry-index{font-size:10px;font-weight:700;color:#b4adc2;margin-right:6px}.entry-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tag{display:inline-flex;align-items:center;gap:6px;padding:4px 7px 4px 9px;border-radius:9px;background:#f1edfe;color:#6451b8;font-size:12px;font-weight:800}.tag button{border:0;background:#e0d6fb;border-radius:6px;min-width:23px;min-height:23px;color:#5e47b4;font-size:13px;line-height:1}.entry-note{font-size:13px;white-space:pre-wrap;margin-top:7px;border-left:3px solid #f2a8bf;padding:4px 0 4px 10px;color:#6a5270}.entry-tools{display:flex;align-items:center;gap:8px}.entry-tools button{border:0;background:#f6f3fb;border-radius:8px;color:#766a95;padding:6px 9px;font-size:11px;font-weight:750}.empty{font-size:12px;color:#9690a3;margin:6px 0}.footer{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:15px 0;color:#8a849f;font-size:11px}.footer-left{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.footer button{border:0;background:none;padding:5px;color:#7166a3;text-decoration:underline;font-size:11px}.data-tools{display:flex;gap:7px;flex-wrap:wrap}.data-tools button{border:1px solid #e6e0f1;background:white;border-radius:10px;color:#766998;padding:8px 10px;font-weight:700;font-size:11px}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#38314f;color:#fff;padding:11px 18px;border-radius:30px;box-shadow:0 12px 25px #2d25413c;font-size:12px;max-width:90%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;transition:opacity .18s,transform .18s;z-index:5}.toast.show{transform:translate(-50%,0);opacity:1}.edit-lyrics{display:none;background:#f6f3fe;border-top:1px solid #e8e0f4;padding:18px 24px}.edit-lyrics.open{display:block}.edit-lyrics textarea{width:100%;min-height:135px;border:1px solid #dcd5ed;border-radius:13px;padding:12px;font-size:14px;resize:vertical;color:var(--ink)}.edit-lyrics p{color:var(--muted);font-size:11px}.edit-actions{display:flex;gap:8px;justify-content:flex-end}.selection-tip{display:none;font-size:11px;color:#9f5783;font-weight:750}.edit-active .selection-tip{display:block}@keyframes markflash{0%{box-shadow:0 0 0 0 #9f7aecaa}45%{box-shadow:0 0 0 5px #ab8dec66}100%{box-shadow:0 0 0 0 transparent}}@media(max-width:610px){.app{padding-top:15px}.head{margin-bottom:21px}.hero{margin-bottom:16px}.workspace-head{padding:17px 14px 13px;flex-wrap:wrap}.note-caption{padding:9px 14px}.lyrics{padding:24px 14px 18px}.symbol-grid{gap:6px}.symbol{font-size:19px;min-height:63px;border-radius:12px}.panel{padding:14px}.mode-switch button{padding:8px 11px}.logo small{font-size:8px}.range-chip{font-size:10px}.edit-lyrics{padding:14px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
@@ -401,10 +408,10 @@
 </head>
 <body>
 <main class="app">
-  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>MAKE YOUR VOICE BLOOM</small><div class="logotype">UtaNote <span style="font-size:10px;font-weight:650;color:#a79fc2">v3.13.5</span></div></div></div>
+  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom <span style="font-size:10px;font-weight:650;color:#a79fc2">v3.14.6 · 仮称</span></div></div></div>
     <div class="head-right top-quick-actions"><button class="nav-btn" id="nav-library" type="button">♫ 曲一覧</button><button class="nav-btn" id="nav-quick" type="button">♫ キーをメモ</button><button class="nav-btn nav-primary" id="nav-new" type="button">＋ 新規登録</button><button class="top-btn" id="guide-again" type="button" hidden>? 使い方</button><button class="top-btn" id="edit-open" type="button" hidden>✎ 曲・歌詞編集</button></div></header>
   <section id="library-view" class="page-view" aria-label="曲一覧">
-    <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>楽曲を登録して、自分だけの歌唱ノートを育てよう。</p></div>
+    <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>歌詞に想いを重ねて、自分らしい歌を育てよう。</p></div>
     <div class="library-head"><h2>♫ マイソング</h2><span class="library-count" id="library-count">0 曲</span></div>
     <div class="library-search" role="search" aria-label="登録曲を検索">
       <label for="song-search">曲名・アーティスト名で検索</label>
@@ -432,7 +439,7 @@
         <div class="reg-field"><label for="quick-existing-song">既存の曲に紐づける <small>任意・新規の曲なら未選択</small></label><select id="quick-existing-song" class="quick-existing-song"><option value="">＋ 新しい曲としてメモする</option></select></div>
         <div class="reg-grid">
           <div class="reg-field"><label for="quick-song-title">曲名 <small>必須</small></label><input id="quick-song-title" maxlength="100" autocomplete="off" placeholder="例：光の余韻" required></div>
-          <div class="reg-field"><label for="quick-song-artist">アーティスト <small>任意</small></label><input id="quick-song-artist" maxlength="100" autocomplete="off" placeholder="例：UtaNote Demo"></div>
+          <div class="reg-field"><label for="quick-song-artist">アーティスト <small>任意</small></label><input id="quick-song-artist" maxlength="100" autocomplete="off" placeholder="例：アーティスト名"></div>
         </div>
         <div class="quick-key-box">
           <div class="quick-key-heading"><strong>今回の歌唱キー</strong><span id="quick-key-summary">原キー</span></div>
@@ -454,7 +461,7 @@
     <form id="song-form" class="reg-shell" novalidate>
       <div class="reg-main">
         <div class="reg-grid"><div class="reg-field"><label for="song-title">曲名 <small>必須</small></label><input id="song-title" name="title" type="text" maxlength="100" placeholder="例：光の余韻" required autocomplete="off"></div>
-        <div class="reg-field"><label for="song-artist">アーティスト名 <small>任意</small></label><input id="song-artist" name="artist" type="text" maxlength="100" placeholder="例：UtaNote Demo" autocomplete="off"></div></div>
+        <div class="reg-field"><label for="song-artist">アーティスト名 <small>任意</small></label><input id="song-artist" name="artist" type="text" maxlength="100" placeholder="例：アーティスト名" autocomplete="off"></div></div>
         <div class="reg-field"><label for="song-lyrics">歌詞 <small>あとから追加OK</small></label><textarea id="song-lyrics" name="lyrics" maxlength="6000" placeholder="歌詞をここに入力・貼り付け
 
 改行はそのまま歌唱ノートに反映されます" spellcheck="false"></textarea><div class="reg-meta"><span>改行は保持。歌詞を修正しても注釈の位置をできる限り調整します。</span><span id="register-count">0 文字・0 行</span></div><p id="register-error" class="form-error" role="alert" aria-live="polite"></p></div>
@@ -480,7 +487,7 @@
     <p class="helptext">ここは閲覧専用です。記号や歌詞の変更は「編集する」から行ってください。</p>
   </section>
   <section id="editor-view" class="page-view" aria-label="歌唱ノート編集" hidden>
-  <section class="hero"><span class="eyebrow">SINGING NOTEBOOK</span><h1>歌うアイデアが、<br><em>弾むノート。</em></h1><p>歌詞をタップして、歌い方・発音・解釈を重ねよう。<span class="star" aria-hidden="true">✳</span></p></section>
+  <section class="hero"><span class="eyebrow">SINGING NOTEBOOK</span><h1>あなたらしい歌が、<br><em>花ひらくノート。</em></h1><p>歌詞をタップして、歌い方・発音・解釈を重ねよう。<span class="star" aria-hidden="true">✳</span></p></section>
   <div class="lyrics-empty-hint" id="editor-no-lyrics" hidden>この曲はキーメモだけ登録されています。<button type="button" id="editor-add-lyrics">＋ 歌詞を追加して歌唱メモを付ける</button></div>
   <section class="key-panel" aria-label="楽曲のキーメモ">
     <h3>♫ キーメモ</h3>
@@ -515,7 +522,7 @@
   <div id="selection-inspector" class="selection-inspector" hidden aria-live="polite"><div class="selection-inspector-head"><span id="selection-inspector-title">選択中の注釈</span> <small>歌詞を選択して編集・削除</small></div><div id="selection-annotations" class="selection-annotations"></div></div>
   </div>
   <section class="workspace" aria-label="歌唱ノート">
-    <div class="workspace-head"><div><div class="workspace-meta">PRACTICE NOTE · LYRICS EDITOR <span class="build-label">v3.14.5</span></div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
+    <div class="workspace-head"><div><div class="workspace-meta">PRACTICE NOTE · LYRICS EDITOR <span class="build-label">v3.14.6</span></div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
     <div class="note-caption"><i class="pulse" aria-hidden="true"></i><span id="mode-hint">記号・注釈は表示部分をタップすると直接編集できます</span></div>
     <div id="lyrics" class="lyrics" aria-label="タップで範囲選択できる歌詞"></div>
   </section>
@@ -541,7 +548,7 @@
 
 
   <div class="editor-savebar"><span id="save-state" role="status">自動保存済み</span><button type="button" id="manual-save">✓ 保存する</button></div>
-  <footer class="footer"><div class="footer-left"><span id="storage-message">入力後に自動保存・成功時刻を表示</span><span>・</span><span>プロトタイプ v3.13.5</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
+  <footer class="footer"><div class="footer-left"><span id="storage-message">入力後に自動保存・成功時刻を表示</span><span>・</span><span>UtaBloom（仮称）プロトタイプ v3.14.6</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
   <input id="import-input" type="file" accept="application/json,.json" hidden>
   </section>
 </main>
@@ -604,7 +611,7 @@ function downloadSongbook(){
  const payload={format:'utanote-songbook-v1',exportedAt:new Date().toISOString(),songs};
  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='utanote-songbook-'+new Date().toISOString().slice(0,10)+'.json';
+ a.href=url;a.download='utabloom-songbook-'+new Date().toISOString().slice(0,10)+'.json';
  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 function persistSongs(){
@@ -1319,8 +1326,8 @@ els.pronInput.addEventListener('input',()=>{pendingPron=true;$('quick-pron-input
 ['key-original','key-shift','key-comment'].forEach(id=>$(id).addEventListener('change',()=>{saveKeyInfo()}));
 $('key-comment').addEventListener('input',()=>setSaveState('キーのメモを編集中…'));
 $('import').addEventListener('click',()=>$('import-input').click());
-$('import-input').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const source=JSON.parse(await file.text());if(source.format!=='utanote-demo-v3'||!Array.isArray(source.marks)||!Array.isArray(source.memos)||typeof source.text!=='string')throw new Error('unsupported');if(!confirm('現在のノートを読み込んだデータで置き換えますか？'))return;change(()=>{data=validData(source)});const importedSong=songs.find(x=>x.id===currentSongId);if(importedSong&&source.keyInfo){importedSong.keyInfo=normalizeKeyInfo(source.keyInfo);persistSongs();fillKeyEditor(importedSong)}clearSelection();toast('歌詞・注釈データを読み込みました')}catch(err){toast('UtaNote v3の保存データを選んでください')}finally{e.target.value=''}});
-$('export').addEventListener('click',()=>{const song=songs.find(x=>x.id===currentSongId);const json=JSON.stringify({format:'utanote-demo-v3',title:song?.title||'',artist:song?.artist||'',keyInfo:normalizeKeyInfo(song?.keyInfo),...data},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='utanote-'+(song?.title||'backup').replace(/[\\/:*?"<>|]/g,'_').slice(0,40)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);toast('データをJSONで保存しました')});
+$('import-input').addEventListener('change',async e=>{const file=e.target.files&&e.target.files[0];if(!file)return;try{const source=JSON.parse(await file.text());if(source.format!=='utanote-demo-v3'||!Array.isArray(source.marks)||!Array.isArray(source.memos)||typeof source.text!=='string')throw new Error('unsupported');if(!confirm('現在のノートを読み込んだデータで置き換えますか？'))return;change(()=>{data=validData(source)});const importedSong=songs.find(x=>x.id===currentSongId);if(importedSong&&source.keyInfo){importedSong.keyInfo=normalizeKeyInfo(source.keyInfo);persistSongs();fillKeyEditor(importedSong)}clearSelection();toast('歌詞・注釈データを読み込みました')}catch(err){toast('旧UtaNote形式（v3）の保存データを選んでください')}finally{e.target.value=''}});
+$('export').addEventListener('click',()=>{const song=songs.find(x=>x.id===currentSongId);const json=JSON.stringify({format:'utanote-demo-v3',title:song?.title||'',artist:song?.artist||'',keyInfo:normalizeKeyInfo(song?.keyInfo),...data},null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='utabloom-'+(song?.title||'backup').replace(/[\\/:*?"<>|]/g,'_').slice(0,40)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);toast('データをJSONで保存しました')});
 window.addEventListener('pagehide',()=>flushNoteDrafts(false));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(quickEditRange)closeQuickEdit();else clearSelection()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'&&!['TEXTAREA','INPUT'].includes(document.activeElement.tagName)){e.preventDefault();$('undo').click()}});
 
@@ -1416,7 +1423,7 @@ function submitQuickSong(e){
   const persisted=persistSongs();
   let backupDownloaded=false;
   if(!persisted){
-   try{downloadSongbook();backupDownloaded=true}catch(downloadError){console.error('UtaNote: backup download failed',downloadError)}
+   try{downloadSongbook();backupDownloaded=true}catch(downloadError){console.error('UtaBloom: backup download failed',downloadError)}
   }
   $('song-search').value='';
   renderLibrary();
@@ -1431,7 +1438,7 @@ function submitQuickSong(e){
       :'⚠ 「'+title+'」は一時登録のみです。ブラウザへの保存もJSONダウンロードもできませんでした。再読み込みせず内容を控えてください。';
   toast(persisted?'キーメモを保存しました':backupDownloaded?'一時登録しました。JSONバックアップを保管してください':'保存できませんでした。内容を控えてください');
  }catch(err){
-  console.error('UtaNote: quick save error',err);
+  console.error('UtaBloom: quick save error',err);
   setQuickFeedback('保存できませんでした。エラー：'+String(err?.message||err).slice(0,160),true);
   setQuickClickStatus('保存処理のエラーです。表示されたエラーをお知らせください');
  }finally{btn.disabled=false}
@@ -1564,7 +1571,7 @@ function submitSong(e){
   if(text.trim()){openSong(song.id);toast('曲を登録しました。歌唱記号を付けてみよう ✦')}
   else{showView('library');toast('曲名を保存しました。歌詞はあとから追加できます')}
  }catch(err){
-  console.error('UtaNote: registration failed',err);
+  console.error('UtaBloom: registration failed',err);
   formFeedback('登録処理でエラーが発生しました。もう一度試すか、画面の内容を控えてください。',true);
  }
 }
@@ -1573,7 +1580,7 @@ $('quick-existing-song').addEventListener('change',chooseExistingQuickSong);
 $('quick-key-minus').addEventListener('click',()=>adjustQuickKey(-1));$('quick-key-plus').addEventListener('click',()=>adjustQuickKey(1));$('quick-key-shift').addEventListener('input',updateQuickKeyLabel);$('quick-song-title').addEventListener('input',()=>{$('quick-song-title').removeAttribute('aria-invalid');setQuickFeedback('曲名を入力して保存できます。')});$('quick-song-form').addEventListener('submit',submitQuickSong);$('quick-song-save').addEventListener('click',submitQuickSong);
 $('nav-new').addEventListener('click',()=>openForm(null,lastView));$('nav-library').addEventListener('click',()=>{renderLibrary();showView('library')});$('register-back').addEventListener('click',()=>{if(formOrigin==='editor'&&currentSongId){openSong(currentSongId)}else if(formOrigin==='reader'&&currentSongId){openReader(currentSongId)}else{renderLibrary();showView('library')}});
 ['song-title','song-artist','song-lyrics'].forEach(id=>$(id).addEventListener('input',()=>{$('register-error').textContent='';$('register-feedback').textContent='曲名だけでも登録できます。';$('register-feedback').classList.remove('is-error');$(id).removeAttribute('aria-invalid');updatePreview()}));$('song-form').addEventListener('submit',submitSong);$('form-save').addEventListener('click',submitSong);
-$('form-demo').addEventListener('click',()=>{if(($('song-title').value||$('song-lyrics').value)&&!confirm('現在の入力内容をサンプルで置き換えますか？'))return;$('song-title').value='光の余韻';$('song-artist').value='UtaNote デモ';$('song-lyrics').value=DEFAULT;updatePreview();toast('サンプルを入力しました')});
+$('form-demo').addEventListener('click',()=>{if(($('song-title').value||$('song-lyrics').value)&&!confirm('現在の入力内容をサンプルで置き換えますか？'))return;$('song-title').value='光の余韻';$('song-artist').value='UtaBloom デモ';$('song-lyrics').value=DEFAULT;updatePreview();toast('サンプルを入力しました')});
 $('song-list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.open)openReader(b.dataset.open);else if(b.dataset.edit)openSong(b.dataset.edit);else if(b.dataset.addLyrics)openForm(b.dataset.addLyrics,'library');else if(b.dataset.delete){const song=songs.find(x=>x.id===b.dataset.delete);if(!song)return;if(!confirm('「'+song.title+'」と注釈を削除しますか？ この操作は元に戻せません。'))return;songs=songs.filter(x=>x.id!==song.id);if(currentSongId===song.id)currentSongId=null;persistSongs();renderLibrary();toast('曲を削除しました')}});
 $('legacy-import').addEventListener('click',()=>{try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(!old||typeof old.text!=='string')throw Error();if(!confirm('v3.5のノートを新しい曲として複製します。旧データは変更しません。'))return;const song={id:newId(),title:'v3.5から取り込んだ曲',artist:'',updatedAt:new Date().toISOString(),content:validData(old)};songs.push(song);persistSongs();renderLibrary();openSong(song.id);toast('以前のノートを取り込みました')}catch(e){toast('旧データを読み込めませんでした')}});
 
@@ -1596,7 +1603,7 @@ $('library-restore-file').addEventListener('change',async e=>{
   if(!confirm(imported.length+'曲を読み込みます。現在の曲一覧 '+songs.length+'曲は置き換えられます。続けますか？'))return;
   songs=imported;const persisted=persistSongs();renderLibrary();refreshStorageStatus();
   toast(persisted?'曲一覧を復元しました':'一時的に復元しました。JSONを保管してください');
- }catch(err){console.error(err);alert('読み込みに失敗しました。UtaNoteのバックアップJSONを選択してください。')}
+ }catch(err){console.error(err);alert('読み込みに失敗しました。UtaBloomまたは旧UtaNoteのバックアップJSONを選択してください。')}
  finally{e.target.value=''}
 });
 render();renderLibrary();showView('library');refreshStorageStatus();setQuickClickStatus('準備完了：ボタンを押すと保存処理が始まります');
