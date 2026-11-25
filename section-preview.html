@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.14</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.15</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -90,6 +90,9 @@
 .library-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 13px;gap:12px}
 .library-head h2{font-size:18px;margin:0;letter-spacing:-.03em}
 .library-count{font-size:12px;color:#817998;font-weight:700}
+.library-head-stats{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.library-plan-usage{font-size:12px;color:#62508f;font-weight:750;white-space:nowrap}
+.library-plan-usage[data-at-limit="true"]{color:#94522d}
 .library-list{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden}
 .library-row{display:flex;align-items:center;gap:14px;padding:15px 16px;border-top:1px solid #efeaf7;transition:background .15s}
 .library-row:first-child{border-top:0}.library-row:hover{background:#faf9ff}
@@ -410,7 +413,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.14: section navigation */
+/* v3.14.15: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -458,7 +461,7 @@
     <div class="head-right top-quick-actions"><button class="nav-btn" id="nav-library" type="button">♫ 曲一覧</button><button class="nav-btn" id="nav-quick" type="button">♫ キーをメモ</button><button class="nav-btn nav-primary" id="nav-new" type="button">＋ 新規登録</button><button class="top-btn" id="guide-again" type="button" hidden>? 使い方</button><button class="top-btn" id="edit-open" type="button" hidden>✎ 曲・歌詞編集</button></div></header>
   <section id="library-view" class="page-view" aria-label="曲一覧">
     <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>歌詞に想いを重ねて、自分らしい歌を育てよう。</p></div>
-    <div class="library-head"><h2>♫ マイソング</h2><span class="library-count" id="library-count">0 曲</span></div>
+    <div class="library-head"><h2>♫ マイソング</h2><div class="library-head-stats"><span class="library-count" id="library-count">0 曲</span><span class="library-plan-usage" id="library-plan-usage">無料プラン 0 / 10曲</span></div></div>
     <div class="library-search" role="search" aria-label="登録曲を検索">
       <label for="song-search">曲名・アーティスト名で検索</label>
       <div class="library-search-input">
@@ -626,10 +629,16 @@
 const KEY='utanote-prototype-v3'; // legacy v3.5 key (never overwritten)
 const LIBRARY_KEY='utabloom-section-preview-v3147-library';
 const GUIDE_KEY='utanote-guide-v3';
+// Temporary client-side plan limits; subscription verification requires a backend.
+const PLAN_SONG_LIMITS=Object.freeze({free:10});
+const ACTIVE_PLAN='free';
 const DEFAULT='窓の向こうで光が揺れる\n昨日の迷いも歌になって\n今夜の空へ声を放とう';
 const $=id=>document.getElementById(id);
 let data={text:DEFAULT,marks:[],memos:[],prons:[],breaths:[],separators:[],sections:[]};
 let songs=[],currentSongId=null,editingSongId=null,formOrigin='library',lastView='library';
+function currentSongLimit(){return PLAN_SONG_LIMITS[ACTIVE_PLAN]}
+function canAddSong(){return songs.length<currentSongLimit()}
+function newSongLimitMessage(){return '無料プランでは'+currentSongLimit()+'曲まで登録できます。既存の曲は引き続き編集できます。'}
 let sectionEditActive=false,sectionPickStart=null,sectionPickEnd=null,sectionPickPhase=0,sectionEditId=null,sectionViewVerse='all',sectionViewLabel='all';
  let mode='marks',breathMode=false,separatorMode=false,start=null,end=null,selectionDone=false,editingMark=null,history=[],guideStep=0,guideVisible=false,flashRange=null,toastTimer,pendingMemo=false,pendingPron=false,quickPronOpen=false;
 const els={lyrics:$('lyrics'),list:$('entry-list'),status:$('selection-status'),panelMarks:$('marks-panel'),panelMemo:$('memo-panel'),memoInput:$('memo-input'),pronInput:$('pron-input')};
@@ -1632,6 +1641,9 @@ function renderLibrary(){
    return tokens.every(t=>target.includes(t));
  });
  $('library-count').textContent=query?filtered.length+' / '+songs.length+' 曲':songs.length+' 曲';
+ $('library-plan-usage').textContent='無料プラン '+songs.length+' / '+currentSongLimit()+'曲';
+ $('library-plan-usage').dataset.atLimit=String(!canAddSong());
+ $('library-plan-usage').title=!canAddSong()?'上限に達しています。既存の曲は引き続き編集できます。':'';
  $('song-search-clear').hidden=!input.value;
  $('song-search-status').textContent=query?filtered.length+' 件見つかりました':'';
  if(songs.length===0){
@@ -1699,7 +1711,7 @@ function submitQuickSong(e){
   if(!title){setQuickFeedback('曲名を入力してください（必須）。',true);setQuickClickStatus('入力エラー：曲名が未入力です');$('quick-song-title').setAttribute('aria-invalid','true');$('quick-song-title').focus();return}
   if(!shiftString||!Number.isInteger(shift)||shift<-12||shift>12){setQuickFeedback('キー変更量は−12〜+12の整数で指定してください。',true);setQuickClickStatus('入力エラー：キーの数値を確認してください');$('quick-key-shift').focus();return}
   const existing=songs.find(x=>x.id===$('quick-existing-song').value);
-  if(!existing&&songs.length>=100){setQuickFeedback('この試作品は100曲まで登録できます。',true);setQuickClickStatus('登録件数の上限です');return}
+  if(!existing&&!canAddSong()){setQuickFeedback(newSongLimitMessage(),true);setQuickClickStatus('登録件数の上限です');return}
   const keyInfo=normalizeKeyInfo({original:$('quick-key-original').value,shift,comment:$('quick-key-comment').value});
   if(existing){existing.keyInfo=keyInfo;existing.updatedAt=new Date().toISOString()}
   else songs.push({id:newId(),title,artist,updatedAt:new Date().toISOString(),keyInfo,content:{text:'',marks:[],memos:[],prons:[],breaths:[],separators:[]}});
@@ -1876,7 +1888,7 @@ function submitSong(e){
    song.updatedAt=new Date().toISOString();
    persistSongs();renderLibrary();openSong(song.id);toast(changed?'歌詞を更新し、注釈 '+remapped.kept+' 件を引き継ぎました':'曲を更新しました');return;
   }
-  if(songs.length>=100){formFeedback('この試作品は100曲まで登録できます。',true);return}
+  if(!canAddSong()){formFeedback(newSongLimitMessage(),true);return}
   const song={id:newId(),title,artist,updatedAt:new Date().toISOString(),keyInfo:normalizeKeyInfo(null),content:{text,marks:[],memos:[],prons:[],breaths:[],separators:[],sections:[]}};
   songs.push(song);persistSongs();renderLibrary();
   if(text.trim()){openSong(song.id);toast('曲を登録しました。歌唱記号を付けてみよう ✦')}
@@ -1893,7 +1905,7 @@ $('nav-new').addEventListener('click',()=>openForm(null,lastView));$('nav-librar
 ['song-title','song-artist','song-lyrics'].forEach(id=>$(id).addEventListener('input',()=>{$('register-error').textContent='';$('register-feedback').textContent='曲名だけでも登録できます。';$('register-feedback').classList.remove('is-error');$(id).removeAttribute('aria-invalid');updatePreview()}));$('song-form').addEventListener('submit',submitSong);$('form-save').addEventListener('click',submitSong);
 $('form-demo').addEventListener('click',()=>{if(($('song-title').value||$('song-lyrics').value)&&!confirm('現在の入力内容をサンプルで置き換えますか？'))return;$('song-title').value='光の余韻';$('song-artist').value='UtaBloom デモ';$('song-lyrics').value=DEFAULT;updatePreview();toast('サンプルを入力しました')});
 $('song-list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.open)openReader(b.dataset.open);else if(b.dataset.edit)openSong(b.dataset.edit);else if(b.dataset.addLyrics)openForm(b.dataset.addLyrics,'library');else if(b.dataset.delete){const song=songs.find(x=>x.id===b.dataset.delete);if(!song)return;if(!confirm('「'+song.title+'」と注釈を削除しますか？ この操作は元に戻せません。'))return;songs=songs.filter(x=>x.id!==song.id);if(currentSongId===song.id)currentSongId=null;persistSongs();renderLibrary();toast('曲を削除しました')}});
-$('legacy-import').addEventListener('click',()=>{try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(!old||typeof old.text!=='string')throw Error();if(!confirm('v3.5のノートを新しい曲として複製します。旧データは変更しません。'))return;const song={id:newId(),title:'v3.5から取り込んだ曲',artist:'',updatedAt:new Date().toISOString(),content:validData(old)};songs.push(song);persistSongs();renderLibrary();openSong(song.id);toast('以前のノートを取り込みました')}catch(e){toast('旧データを読み込めませんでした')}});
+$('legacy-import').addEventListener('click',()=>{try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(!old||typeof old.text!=='string')throw Error();if(!canAddSong()){toast(newSongLimitMessage());return}if(!confirm('v3.5のノートを新しい曲として複製します。旧データは変更しません。'))return;const song={id:newId(),title:'v3.5から取り込んだ曲',artist:'',updatedAt:new Date().toISOString(),content:validData(old)};songs.push(song);persistSongs();renderLibrary();openSong(song.id);toast('以前のノートを取り込みました')}catch(e){toast('旧データを読み込めませんでした')}});
 
 $('library-backup').addEventListener('click',()=>{
  try{downloadSongbook();toast('曲一覧のバックアップJSONをダウンロードしました')}
@@ -1911,7 +1923,11 @@ $('library-restore-file').addEventListener('change',async e=>{
    imported=[{id:newId(),title:String(input.title||'取り込んだ曲').slice(0,100),artist:String(input.artist||'').slice(0,100),updatedAt:new Date().toISOString(),content:validData(input),keyInfo:normalizeKeyInfo(input.keyInfo)}];
   }else throw Error('invalid format');
   if(!imported.length)throw Error('no songs');
-  if(!confirm(imported.length+'曲を読み込みます。現在の曲一覧 '+songs.length+'曲は置き換えられます。続けますか？'))return;
+  const exceedsFreeLimit=imported.length>currentSongLimit();
+   const restoreNotice=imported.length+'曲を読み込みます。現在の曲一覧 '+songs.length+'曲は置き換えられます。'
+     +(exceedsFreeLimit?'\n\n無料プランの上限（'+currentSongLimit()+'曲）を超えるバックアップです。復元した曲は削除しませんが、新しい曲は登録できなくなります。':'')
+     +'\n\n続けますか？';
+   if(!confirm(restoreNotice))return;
   songs=imported;const persisted=persistSongs();renderLibrary();refreshStorageStatus();
   toast(persisted?'曲一覧を復元しました':'一時的に復元しました。JSONを保管してください');
  }catch(err){console.error(err);alert('読み込みに失敗しました。UtaBloomまたは旧UtaNoteのバックアップJSONを選択してください。')}
