@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.13</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.14</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -410,7 +410,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.13: section navigation */
+/* v3.14.14: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -549,9 +549,9 @@
     <div class="quick-buttons" id="quick-buttons">
       <button type="button" data-symbol="↗" title="上げる">↗</button><button type="button" data-symbol="↘" title="下げる">↘</button>
       <button type="button" data-symbol="息" title="ウィスパー">息</button><button type="button" data-symbol="強" title="強調">強</button>
-      <button type="button" data-symbol="〜" title="ロングトーン">〜</button><button type="button" data-symbol="〰" title="ビブラート">〰</button><button type="button" data-symbol="・" title="範囲内の各文字にアクセント">・</button>
-      <button type="button" data-symbol="＜" title="クレッシェンド（だんだん強く）" aria-label="クレッシェンド・だんだん強く">＜</button>
-      <button type="button" data-symbol="＞" title="デクレッシェンド（だんだん弱く）" aria-label="デクレッシェンド・だんだん弱く">＞</button>
+      <button type="button" data-symbol="〜" title="ロングトーン">〜</button><button type="button" data-symbol="〰" title="ビブラート">〰</button><button type="button" data-symbol="・" title="アクセント">・</button>
+      <button type="button" data-symbol="＜" title="だんだん強く" aria-label="クレッシェンド・だんだん強く">＜</button>
+      <button type="button" data-symbol="＞" title="だんだん弱く" aria-label="デクレッシェンド・だんだん弱く">＞</button>
       <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
       <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
     </div>
@@ -593,7 +593,7 @@
   <section class="panel" id="editor-panel">
     <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3></div>
       <p class="helptext mark-help">文字ごとに設定できます。</p>
-      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜" title="クレッシェンド（だんだん強く）">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞" title="デクレッシェンド（だんだん弱く）">＞<small>だんだん弱く</small></button></div>
+      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
       <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎ）とフレージング（区切り）</h3></div>
         <p class="helptext breath-help">行頭・行末・文字間をタップして、追加・解除できます。</p>
         <button type="button" id="breath-toggle" class="breath-toggle" aria-pressed="false">＋ ブレスを挿入</button>
@@ -1173,8 +1173,13 @@ function renderToolbar(){
  const insertionActive=breathMode||separatorMode;
  document.querySelectorAll('#quick-buttons [data-symbol], #symbol-grid [data-symbol]').forEach(b=>{
   b.disabled=insertionActive;
-  if(!b.dataset.normalTitle)b.dataset.normalTitle=b.title;
-  b.title=insertionActive?'挿入モードを終了すると選べます':b.dataset.normalTitle;
+  // The lower symbol grid already has visible captions for these two marks.
+  const noTooltip=b.closest('#symbol-grid')&&(b.dataset.symbol==='＜'||b.dataset.symbol==='＞');
+  if(noTooltip){b.removeAttribute('title');return}
+  if(b.dataset.normalTitle===undefined)b.dataset.normalTitle=b.getAttribute('title')||'';
+  if(insertionActive)b.title='挿入モードを終了すると選べます';
+  else if(b.dataset.normalTitle)b.title=b.dataset.normalTitle;
+  else b.removeAttribute('title');
  });
  $('quick-pron-toggle').disabled=insertionActive;
  $('pron-save').disabled=insertionActive;
