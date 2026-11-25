@@ -844,7 +844,9 @@ function renderSectionSetup(){
  }
 }
 function renderSectionNavigation(target){
- if(!target)return;target.replaceChildren();
+ if(!target)return;
+ if(target.id==='editor-section-nav')target.hidden=sectionEditActive;
+ target.replaceChildren();
  const all=data.sections||[],verses=[...new Set(all.map(x=>x.verse))];
  if(sectionViewVerse!=='all'&&!verses.includes(sectionViewVerse)){sectionViewVerse='all';sectionViewLabel='all'}
  function row(label,values,key,selected){
