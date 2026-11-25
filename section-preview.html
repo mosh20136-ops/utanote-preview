@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.10</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.11</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -407,7 +407,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.10: section navigation */
+/* v3.14.11: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -437,10 +437,9 @@
 </head>
 <body>
 <main class="app">
-  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom <span style="font-size:10px;font-weight:650;color:#a79fc2">v3.14.10 · 仮称</span></div></div></div>
+  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom </div></div></div>
     <div class="head-right top-quick-actions"><button class="nav-btn" id="nav-library" type="button">♫ 曲一覧</button><button class="nav-btn" id="nav-quick" type="button">♫ キーをメモ</button><button class="nav-btn nav-primary" id="nav-new" type="button">＋ 新規登録</button><button class="top-btn" id="guide-again" type="button" hidden>? 使い方</button><button class="top-btn" id="edit-open" type="button" hidden>✎ 曲・歌詞編集</button></div></header>
   <section id="library-view" class="page-view" aria-label="曲一覧">
-<div class="library-tip" role="status">セクション分け機能の試用版です。通常版とは別のブラウザ保存領域を使用します。通常版の曲を試す場合はJSONバックアップを読み込んでください。</div>
     <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>歌詞に想いを重ねて、自分らしい歌を育てよう。</p></div>
     <div class="library-head"><h2>♫ マイソング</h2><span class="library-count" id="library-count">0 曲</span></div>
     <div class="library-search" role="search" aria-label="登録曲を検索">
@@ -459,7 +458,7 @@
       <input type="file" id="library-restore-file" accept=".json,application/json" hidden>
     </div>
     <div class="library-tip" id="library-result-banner" role="status" aria-live="polite" hidden></div>
-    <div class="library-tip" id="library-storage-note" role="status" aria-live="polite">保存先：このブラウザ内（localStorage）。HTMLファイル自体には書き込まれません。大切な内容は「曲一覧をJSONでバックアップ」してください。</div>
+    <div class="library-tip" id="library-storage-note" role="status" aria-live="polite">曲はこのブラウザに保存されます。通常版とは共有されません。必要に応じてJSONでバックアップしてください。</div>
   </section>
   <section id="quick-view" class="page-view" aria-label="クイックキーメモ" hidden>
     <button type="button" id="quick-back" class="back-link">← 曲一覧に戻る</button>
@@ -478,11 +477,10 @@
             <div class="quick-key-stepper"><span>原曲から（半音）</span><div class="quick-stepper-controls"><button type="button" id="quick-key-minus" aria-label="半音下げる">−</button><input id="quick-key-shift" type="number" min="-12" max="12" step="1" value="0" aria-label="半音の変更量"><button type="button" id="quick-key-plus" aria-label="半音上げる">＋</button></div></div>
           </div>
           <div class="reg-field quick-comment"><label for="quick-key-comment">歌った感想・メモ <small>任意</small></label><textarea id="quick-key-comment" maxlength="500" rows="3" placeholder="例：−2で歌いやすい。サビは少しきつい。"></textarea></div>
-          <p class="quick-note-help">このキーは曲一覧・閲覧画面・編集画面に表示されます。</p>
-          <p id="quick-storage-status" class="quick-note-help" role="status" aria-live="polite">保存先：このブラウザ内。必要なら曲一覧からJSONをバックアップできます。</p>
+                    <p id="quick-storage-status" class="quick-note-help" role="status" aria-live="polite">保存先：このブラウザ内。必要なら曲一覧からJSONをバックアップできます。</p>
         </div>
       </div>
-      <div class="reg-form-footer"><div class="reg-note">歌詞なしで保存できます。あとから「歌詞を追加」で同じ曲に付け足せます。</div><div class="reg-buttons"><button type="button" class="reg-save" id="quick-song-save">キーメモを保存 →</button></div><p class="register-feedback" id="quick-form-feedback" role="status" aria-live="polite">⚠ 画面の処理が準備できていません。ファイルをEdgeかChromeで開いてください。</p><p id="quick-click-status" class="quick-note-help" role="status" aria-live="polite">処理待機中</p></div>
+      <div class="reg-form-footer"><div class="reg-note">歌詞なしで保存できます。あとから「歌詞を追加」で同じ曲に付け足せます。</div><div class="reg-buttons"><button type="button" class="reg-save" id="quick-song-save">キーメモを保存 →</button></div><p class="register-feedback" id="quick-form-feedback" role="status" aria-live="polite">曲名とキーを入力して保存できます。</p><p id="quick-click-status" class="quick-note-help" role="status" aria-live="polite" hidden></p></div>
     </form>
   </section>
   <section id="register-view" class="page-view" aria-label="楽曲登録" hidden>
@@ -504,19 +502,18 @@
 
   <section id="reader-view" class="page-view" aria-label="歌唱ノート閲覧" hidden>
     <button type="button" class="back-link" id="reader-back">← 曲一覧に戻る</button>
-    <div class="read-head"><div><span class="eyebrow">SINGING NOTE · VIEW</span><h1 id="reader-song-title">歌唱ノート</h1><div class="read-sub" id="reader-song-sub"></div></div>
+    <div class="read-head"><div><h1 id="reader-song-title">歌唱ノート</h1><div class="read-sub" id="reader-song-sub"></div></div>
       <button type="button" id="reader-to-editor" class="reg-save">✎ 編集する</button></div>
     <div class="read-key" id="reader-key"></div>
     <div class="lyrics-empty-hint" id="reader-no-lyrics" hidden>まだ歌詞を登録していません。<button type="button" id="reader-add-lyrics">＋ 歌詞を追加</button></div>
     <div class="workspace">
-      <div class="workspace-head"><div><span class="workspace-meta">READ ONLY · 練習用の表示</span><h2>歌詞と歌唱メモ</h2></div>
+      <div class="workspace-head"><div><h2>歌詞と歌唱メモ</h2></div>
         <div class="mode-switch" role="group" aria-label="閲覧表示モード"><button type="button" data-read-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-read-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div>
       </div>
       <div id="reader-section-nav" class="section-navigation" aria-label="閲覧セクション切り替え"></div>
        <div id="reader-lyrics" class="lyrics reader-lyrics" aria-label="歌詞と注釈（閲覧専用）"></div>
     </div>
-    <p class="helptext">ここは閲覧専用です。記号や歌詞の変更は「編集する」から行ってください。</p>
-  </section>
+      </section>
   <section id="editor-view" class="page-view" aria-label="歌唱ノート編集" hidden>
   <section class="hero"><span class="eyebrow">SINGING NOTEBOOK</span><h1>あなたらしい歌が、<br><em>花ひらくノート。</em></h1><p>歌詞をタップして、歌い方・発音・解釈を重ねよう。<span class="star" aria-hidden="true">✳</span></p></section>
   <div class="lyrics-empty-hint" id="editor-no-lyrics" hidden>この曲はキーメモだけ登録されています。<button type="button" id="editor-add-lyrics">＋ 歌詞を追加して歌唱メモを付ける</button></div>
@@ -553,7 +550,7 @@
   <div id="selection-inspector" class="selection-inspector" hidden aria-live="polite"><div class="selection-inspector-head"><span id="selection-inspector-title">選択中の注釈</span> <small>歌詞を選択して編集・削除</small></div><div id="selection-annotations" class="selection-annotations"></div></div>
   </div>
   <section class="workspace" aria-label="歌唱ノート">
-    <div class="workspace-head"><div><div class="workspace-meta">PRACTICE NOTE · LYRICS EDITOR <span class="build-label">v3.14.10</span></div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
+    <div class="workspace-head"><div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
     <div class="note-caption"><i class="pulse" aria-hidden="true"></i><span id="mode-hint">記号・注釈は表示部分をタップすると直接編集できます</span></div>
     <div id="editor-section-nav" class="section-navigation" aria-label="編集セクション切り替え"></div>
      <div class="section-setup">
@@ -592,8 +589,8 @@
   <section class="panel" hidden aria-hidden="true"><div class="panel-head"><h3 id="list-title">つけた記号 <span id="count">0</span></h3></div><div id="entry-list"></div></section>
 
 
-  <div class="editor-savebar"><span id="save-state" role="status">自動保存済み</span><button type="button" id="manual-save">✓ 保存する</button></div>
-  <footer class="footer"><div class="footer-left"><span id="storage-message">入力後に自動保存・成功時刻を表示</span><span>・</span><span>UtaBloom（仮称）プロトタイプ v3.14.10</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
+  <div class="editor-savebar"><span id="save-state" role="status">自動保存済み</span><button type="button" id="manual-save">✓ 保存して閲覧へ</button></div>
+  <footer class="footer"><div class="footer-left"><span id="storage-message">保存状況を確認できます</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
   <input id="import-input" type="file" accept="application/json,.json" hidden>
   </section>
 </main>
@@ -662,8 +659,8 @@ function refreshStorageStatus(){
  const library=$('library-storage-note');
  const quick=$('quick-storage-status');
  if(storageOK){
-  library.textContent='保存先：このブラウザ内（localStorage）。HTMLファイルや端末の「ダウンロード」には自動作成されません。別のHTMLファイル・ブラウザではデータが共有されないことがあります。曲一覧の「JSONでバックアップ」を利用してください。';
-  quick.textContent='保存先：このブラウザ内。保存後は曲一覧に表示されます。別のファイルへ移すにはJSONバックアップが必要です。';
+  library.textContent='曲はこのブラウザに保存されます。通常版とは共有されないため、必要に応じて曲一覧をJSONでバックアップしてください。';
+  quick.textContent='曲はこのブラウザに保存されます。別の端末に移すときはJSONでバックアップしてください。';
   quick.classList.remove('is-warning');
  }else{
   library.textContent='⚠ この環境ではブラウザへの永続保存ができません。曲はこの画面内に一時登録され、保存時にバックアップJSONのダウンロードを試みます。再読込前にJSONファイルを保管し、次回は「JSONから曲一覧を復元」してください。';
@@ -1559,7 +1556,25 @@ $('section-existing').addEventListener('click',e=>{
    toast('セクションを削除しました');
  }
 });
-$('manual-save').addEventListener('click',()=>{flushNoteDrafts(false);if(pendingMemo){if(!selected()||!els.memoInput.value.trim()){toast('解釈メモの範囲と本文を確認してください');return}saveMemo()}if(pendingPron){if(!selected()||!els.pronInput.value.trim()){toast('発音注釈の範囲と本文を確認してください');return}savePron()}const k=saveKeyInfo();if(!k)return;const saved=save();toast(saved?'この曲を保存しました':'保存できませんでした。JSONでバックアップしてください')});
+$('manual-save').addEventListener('click',()=>{
+ flushNoteDrafts(false);
+ if(pendingMemo){
+  if(!selected()||!els.memoInput.value.trim()){toast('解釈メモの範囲と本文を確認してください');return}
+  saveMemo();
+ }
+ if(pendingPron){
+  if(!selected()||!els.pronInput.value.trim()){toast('発音注釈の範囲と本文を確認してください');return}
+  savePron();
+ }
+ if(!saveKeyInfo())return;
+ if(!save()){
+  toast('保存できませんでした。JSONでバックアップしてください');
+  return;
+ }
+ const songId=currentSongId;
+ openReader(songId);
+ toast('保存しました');
+});
 els.memoInput.addEventListener('input',()=>{pendingMemo=true;$('quick-memo-input').value=els.memoInput.value;scheduleNoteDraft('memo',els.memoInput.value)});
 els.pronInput.addEventListener('input',()=>{pendingPron=true;$('quick-pron-input').value=els.pronInput.value;scheduleNoteDraft('pron',els.pronInput.value)});
 ['key-original','key-shift','key-comment'].forEach(id=>$(id).addEventListener('change',()=>{saveKeyInfo()}));
