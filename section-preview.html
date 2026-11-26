@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.25</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.26</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -428,7 +428,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.25: section navigation */
+/* v3.14.26: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -472,6 +472,16 @@
 .section-row-title{font-size:12px;font-weight:850;color:#6952aa;background:#f6f2ff;border-left:3px solid #947bdd;padding:7px 12px;margin:13px 0 3px;border-radius:2px 8px 8px 2px}
 .lyric-row[hidden]{display:none!important}
 @media(max-width:580px){.section-navigation,.section-setup{padding-left:12px;padding-right:12px}.section-config-inputs{grid-template-columns:1fr}.section-tab{padding:7px 10px}}
+
+/* v3.14.26: consistent, font-independent long-tone bar */
+.long-tone-line{
+ display:inline-block;width:21px;height:3.4px;max-width:100%;
+ border-radius:2px;background:currentColor;vertical-align:middle;flex:0 0 auto;
+}
+#quick-buttons button[data-symbol="━"] .long-tone-line{width:21px;height:3.4px}
+#symbol-grid button[data-symbol="━"] .long-tone-line{width:23px;height:3.6px}
+.inline-annotation .mark-glyph[data-tone="━"] .long-tone-line{width:19px;height:3px}
+.quick-edit-options button[data-tone="━"] .long-tone-line{width:21px;height:3.4px}
 </style>
 </head>
 <body>
@@ -579,7 +589,7 @@
       <div class="quick-symbol-group" role="group" aria-label="音の持続・変化">
         <span class="quick-symbol-group-name" aria-hidden="true">音の持続・変化</span>
         <div class="quick-symbol-group-marks">
-          <button type="button" data-symbol="-" title="ロングトーン">-</button>
+          <button type="button" data-symbol="━" title="ロングトーン" aria-label="ロングトーン"><span class="long-tone-line" aria-hidden="true"></span></button>
           <button type="button" data-symbol="〰" title="ビブラート">〰</button>
         </div>
       </div>
@@ -654,7 +664,7 @@
         </section>
         <section class="notation-group" role="group" aria-label="音の持続・変化">
           <h4 class="notation-group-heading">音の持続・変化</h4>
-          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="-">-<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button></div>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="━" aria-label="ロングトーン"><span class="long-tone-line" aria-hidden="true"></span><small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button></div>
         </section>
         <section class="notation-group" role="group" aria-label="強弱">
           <h4 class="notation-group-heading">強弱</h4>
@@ -717,7 +727,7 @@ const MARK_STYLE={
  '強':{color:'#a15e17',bg:'#fff3e5',border:'#f2dfc0'},
  '裏':{color:'#654ab5',bg:'#f1edff',border:'#dcd3f6'},
  'エ':{color:'#b54362',bg:'#fff0f4',border:'#f2d1dd'},
- '-':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
+ '━':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
  '〰':{color:'#7d4caa',bg:'#f5efff',border:'#e2d1f6'},
  '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'},
  '＜':{color:'#277f65',bg:'#eaf8f0',border:'#cde9dd'},
@@ -756,7 +766,7 @@ function normalizedSections(items,text){
    });
  return out;
 }
-function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','裏','エ','-','〜','～','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:(x.symbol==='〜'||x.symbol==='～')?'-':x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
+function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','裏','エ','━','-','〜','～','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:(x.symbol==='〜'||x.symbol==='～'||x.symbol==='-')?'━':x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
 function refreshStorageStatus(){
  const library=$('library-storage-note');
  const quick=$('quick-storage-status');
@@ -1192,7 +1202,10 @@ function renderLyrics(target=els.lyrics,readOnly=false){
    if(group.marks.length){
      const symbols=document.createElement('span');symbols.className='annotation-glyphs';
      group.marks.forEach(item=>{
-       const glyph=document.createElement('span');glyph.className='mark-glyph';glyph.textContent=item.symbol;
+       const glyph=document.createElement('span');glyph.className='mark-glyph';
+        if(item.symbol==='━'){
+          const line=document.createElement('span');line.className='long-tone-line';line.setAttribute('aria-hidden','true');glyph.appendChild(line);
+        }else glyph.textContent=item.symbol;
        glyph.setAttribute('aria-hidden','true');applyTone(glyph,item.symbol);symbols.appendChild(glyph)
      });
      annotation.appendChild(symbols)
@@ -1211,7 +1224,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Distant annotations reuse the lowest lane instead of floating above empty rows.
   located.forEach((items,v)=>{
     const rank={pron:0,accent:1,mark:2,memo:0};
-    const symbolOrder=['↗','↘','息','強','裏','エ','-','〰','＜','＞'];
+    const symbolOrder=['↗','↘','息','強','裏','エ','━','〰','＜','＞'];
     const placed=[];
     const intersects=(a,b)=>a.start<=b.end&&b.start<=a.end;
     const ordered=[...items].sort((a,b)=>rank[a.kind]-rank[b.kind]
@@ -1341,7 +1354,7 @@ function renderSelectionInspector(){
   empty.textContent='この範囲にはまだ注釈がありません';
   box.appendChild(empty);
  }
- const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ','-':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
+ const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ','━':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
  for(const item of nearby){
   const scope=document.createElement('div');scope.className='scoped-annotation';
   const label=document.createElement('span');label.className='scope-label';
@@ -1431,7 +1444,7 @@ $('selection-annotations').addEventListener('click',event=>{
 
 // v3.10 direct edit: actual saved records stay separate even when visually connected.
 let quickEditRange=null,quickEditAnchor=null;
-const QUICK_SYMBOLS=['↗','↘','息','強','裏','エ','-','〰','・','＜','＞'];
+const QUICK_SYMBOLS=['↗','↘','息','強','裏','エ','━','〰','・','＜','＞'];
 function closeQuickEdit(){quickEditRange=null;quickEditAnchor=null;$('quick-edit').hidden=true}
 function quickItems(){
  if(!quickEditRange)return [];
@@ -1459,7 +1472,7 @@ function showQuickEdit(){
   if(item.symbol){
    const buttons=document.createElement('div');buttons.className='quick-edit-options';
    for(const symbol of QUICK_SYMBOLS){
-    const b=quickButton(symbol,'',()=>{
+    const b=quickButton(symbol==='━'?'':symbol,'',()=>{
      if(symbol===item.symbol)return;
      const range={start:item.start,end:item.end};
      change(()=>{
@@ -1473,7 +1486,11 @@ function showQuickEdit(){
       }else{data.marks.splice(pos,1)}
      });
      showQuickEdit();toast('記号を変更しました');
-    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(VOICE_TONE_NAMES[symbol]||(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」'))+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
+    });
+     if(symbol==='━'){
+       const line=document.createElement('span');line.className='long-tone-line';line.setAttribute('aria-hidden','true');b.appendChild(line);
+     }
+     applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(VOICE_TONE_NAMES[symbol]||(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」'))+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
    }
    section.append(buttons)
   }else{
@@ -1555,7 +1572,7 @@ function renderList(){
   header.append(label,actions);row.appendChild(header);
   if(mode==='marks'){
    const tags=document.createElement('div');tags.className='entry-tags';
-   const symbolOrder=['↗','↘','息','強','裏','エ','-','〰','・','＜','＞'];
+   const symbolOrder=['↗','↘','息','強','裏','エ','━','〰','・','＜','＞'];
    g.items.filter(item=>item.symbol).slice().sort((a,b)=>symbolOrder.indexOf(a.symbol)-symbolOrder.indexOf(b.symbol)).forEach(item=>{
      const chip=document.createElement('span');chip.className='tag';applyTone(chip,item.symbol);
      const edit=document.createElement('button');edit.type='button';edit.textContent=item.symbol+' ✎';edit.title='この記号を変更';edit.dataset.editId=item.id;
