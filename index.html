@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.6.2</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.25</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -56,6 +56,18 @@
 /* v3.4: inhalation is an insertion point, while whisper is a range mark. */
 .breath-editor{margin-top:15px;border-top:1px dashed #eae5f4;padding-top:14px}
 .breath-editor .panel-head{margin-bottom:7px}
+.mark-help{margin:0 0 12px}
+.notation-groups{display:grid;gap:15px}
+.notation-group{min-width:0}
+.notation-group-heading,.voice-group-heading{display:flex;align-items:baseline;gap:9px;margin:0 0 8px;color:#5e4b83;font-size:13px;font-weight:850}
+.voice-group-heading{margin:16px 0 8px}
+.notation-group-heading small,.voice-group-heading small{font-size:11px;font-weight:600;color:#827b97}
+.notation-group .symbol-grid,.voice-color-grid{grid-template-columns:repeat(4,minmax(0,110px))}
+.voice-color-grid .symbol:nth-child(n){background:var(--tone-bg,#f7f4ff);border-color:var(--tone-line,#e9ddf8);color:var(--tone,#6552ba)}
+@media(max-width:580px){.notation-group .symbol-grid,.voice-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.quick-group-label{align-self:center;flex:0 0 auto;font-size:10px;font-weight:800;color:#77658f;border-left:1px solid #e4dcf1;padding:4px 0 4px 9px;white-space:nowrap}
+.breath-help{margin:0 0 10px}
+.breath-editor .separator-toggle{margin-top:9px}
 .breath-toggle{border:1px solid #abd9d3;border-radius:11px;background:#eaf8f6;color:#126e6a;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer}
 .breath-toggle[aria-pressed="true"]{background:#177b76;color:white;border-color:#177b76}
 .breath-gap{display:inline-block;width:0;height:1em;line-height:1;vertical-align:baseline;border:0;margin:0;padding:0;color:#15867d;background:transparent;overflow:hidden;font-size:.58em;font-weight:900;cursor:default;white-space:nowrap;position:relative;top:-.13em;border-radius:5px;-webkit-tap-highlight-color:transparent}
@@ -87,6 +99,9 @@
 .library-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 13px;gap:12px}
 .library-head h2{font-size:18px;margin:0;letter-spacing:-.03em}
 .library-count{font-size:12px;color:#817998;font-weight:700}
+.library-head-stats{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.library-plan-usage{font-size:12px;color:#62508f;font-weight:750;white-space:nowrap}
+.library-plan-usage[data-at-limit="true"]{color:#94522d}
 .library-list{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden}
 .library-row{display:flex;align-items:center;gap:14px;padding:15px 16px;border-top:1px solid #efeaf7;transition:background .15s}
 .library-row:first-child{border-top:0}.library-row:hover{background:#faf9ff}
@@ -171,17 +186,23 @@
 .quick-palette{position:sticky;top:0;z-index:30;background:#fffefefa;backdrop-filter:blur(10px);border:1px solid #e4ddf4;border-radius:15px;margin:10px 0;padding:8px 11px;box-shadow:0 8px 18px #40357413;display:flex;gap:9px;align-items:center;justify-content:space-between}
 .quick-palette[hidden]{display:none!important}
 .quick-context{font-size:11px;font-weight:800;color:#65578f;min-width:0;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.quick-buttons{display:flex;gap:5px;overflow-x:auto;flex:1;justify-content:flex-end;padding:2px 0;scrollbar-width:thin}
+.quick-buttons{display:flex;flex-wrap:wrap;gap:9px 12px;overflow:visible;flex:1 1 100%;min-width:0;justify-content:flex-start;padding:2px 0}
+.quick-symbol-group{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;flex:0 0 auto;min-width:0;padding:0 3px 0 0}
+.quick-symbol-group-name{display:block;font-size:10px;line-height:1.2;font-weight:850;color:#685487;white-space:nowrap}
+.quick-symbol-group-marks{display:flex;align-items:center;gap:4px}
+.quick-symbol-group-marks button{min-width:34px;height:34px}
+@media(max-width:600px){.quick-buttons{gap:9px 11px}.quick-symbol-group-name{font-size:10px}}
 .quick-buttons button{display:inline-grid;place-items:center;flex:0 0 auto;min-width:37px;height:35px;border-radius:9px;background:var(--tone-bg,#f4f1ff);border:1px solid var(--tone-line,#e3d8fb);color:var(--tone,#6652ba);font-size:17px;font-weight:850;padding:4px 7px}
 .quick-buttons .quick-insert{background:#eaf7f5;color:#247e77;border-color:#c4e8e2}
 .quick-buttons .quick-insert#quick-separator{background:#fff3e5;color:#9e671e;border-color:#efd8bb}
 .quick-buttons button[aria-pressed=true]{outline:3px solid #bca9ee;outline-offset:0}
+/* Inline labels remain visible; groups wrap rather than hiding offscreen. */
 /* v3.13.5: insertion modes are exclusive with range annotations. */
-#quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,
+#quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,#voice-grid button[data-symbol]:disabled,
 #quick-pron-toggle:disabled,#pron-save:disabled,#quick-pron-save:disabled{
  opacity:.35!important;filter:grayscale(.7);cursor:not-allowed!important;box-shadow:none!important;
 }
-#quick-buttons button[data-symbol]:disabled:focus-visible,#symbol-grid button[data-symbol]:disabled:focus-visible{
+#quick-buttons button[data-symbol]:disabled:focus-visible,#symbol-grid button[data-symbol]:disabled:focus-visible,#voice-grid button[data-symbol]:disabled:focus-visible{
  outline:2px solid #aaa;outline-offset:1px;
 }
 
@@ -197,7 +218,7 @@
 .inline-annotation{z-index:2}
 .inline-annotation .annotation-glyphs{flex-shrink:0;min-height:21px;flex-wrap:nowrap}
 .inline-annotation .pron-reading{flex-shrink:0}
-@media(max-width:600px){.quick-palette{margin:7px 0;padding:7px;gap:5px;flex-wrap:wrap}.quick-context{max-width:none;width:100%}.quick-buttons{justify-content:flex-start}.quick-buttons button{min-width:35px;height:34px}}
+@media(max-width:600px){.quick-palette{margin:7px 0;padding:7px;gap:5px;flex-wrap:wrap}.quick-context{max-width:none;width:100%}.quick-buttons{justify-content:flex-start}.quick-buttons button{min-width:34px;height:34px}}
 
 /* v3.13.5: memo stays in a sticky input panel; insertion marks are hidden in memo mode. */
 .quick-buttons[hidden],.quick-pron-toggle[hidden],.quick-memo-form[hidden]{display:none!important}
@@ -406,15 +427,60 @@
 .inline-annotation.single-glyph.accent-only .annotation-glyphs{min-height:18px}
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
+
+/* v3.14.25: section navigation */
+.section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
+.section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
+.section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
+.section-tab{background:#fff;border:1px solid #e5def2;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:750;color:#6e628b}
+.section-tab[aria-current="true"]{background:#7058d7;color:#fff;border-color:#7058d7}
+.section-filter-empty{padding:22px 12px;color:#726586;font-size:13px;text-align:center}
+.section-nav-empty{font-size:11px;color:#9289a4}
+.section-setup{padding:10px 18px 12px;border-bottom:1px solid #eee9f7;background:#fdfcff}
+/* Sticky section controls use the original workspace scroll context. */
+#editor-view .workspace.section-editing{overflow:visible}
+#editor-view .workspace.section-editing .section-setup{
+ position:sticky;top:env(safe-area-inset-top,0px);z-index:45;
+ background:#fdfcff;box-shadow:0 7px 18px #40357420;
+ border-radius:0 0 13px 13px;
+}
+#editor-view .workspace.section-editing .section-config-body{
+ max-height:min(47dvh,370px);overflow-y:auto;overscroll-behavior:contain;
+}
+@media(max-width:580px){
+ #editor-view .workspace.section-editing .section-config-body{max-height:min(42dvh,300px)}
+}
+.section-setup-toggle{border:1px solid #ded3f4;border-radius:10px;padding:8px 11px;background:#f4f0ff;color:#604cac;font-weight:800;font-size:12px}
+.section-config-body{margin-top:12px;padding:13px;background:#fff;border:1px solid #e8e0f3;border-radius:12px}
+.section-config-body[hidden]{display:none!important}
+.selection-bar[hidden],.selection-progress[hidden],#editor-panel[hidden]{display:none!important}
+.section-config-body p{margin:0 0 10px;font-size:12px;color:#726586}
+.section-config-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.section-config-inputs label{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:750;color:#665a82}
+.section-config-inputs select,.section-config-inputs input{width:100%;min-width:0;background:#fff;border:1px solid #dcd3ed;border-radius:9px;padding:9px;font-size:13px;min-height:42px;color:#413554}
+.section-custom-wrapper{grid-column:1/-1}
+.section-custom-wrapper[hidden]{display:none!important}
+.section-range-status{margin:12px 0 10px;color:#66548d;font-size:12px;font-weight:800}
+.section-config-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.section-existing{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.section-existing-item{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px;background:#faf8ff;border-radius:9px;font-size:12px;flex-wrap:wrap}
+.section-existing-item button{border:1px solid #ded5f1;background:#fff;color:#6652a5;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:750}
+.section-line-pick{border:1px solid #d9d0ec;background:#fff;color:#7c70a0;border-radius:8px;padding:4px 9px;margin:2px 0 5px;font-size:11px;font-weight:800;min-height:30px}
+.section-line-pick[aria-pressed="true"]{color:#fff;background:#7058d7;border-color:#7058d7}
+.section-current-badge{display:inline-flex;align-items:center;max-width:100%;margin:3px 8px 4px 0;padding:4px 9px;border:1px solid #d9cdf8;border-radius:8px;background:#f1edff;color:#5e49ad;font-weight:800;font-size:11px;line-height:1.4;vertical-align:middle;cursor:pointer}
+.section-current-badge:hover,.section-current-badge[data-editing="true"]{background:#e6dcff;border-color:#aa95e5}
+.section-row-title{font-size:12px;font-weight:850;color:#6952aa;background:#f6f2ff;border-left:3px solid #947bdd;padding:7px 12px;margin:13px 0 3px;border-radius:2px 8px 8px 2px}
+.lyric-row[hidden]{display:none!important}
+@media(max-width:580px){.section-navigation,.section-setup{padding-left:12px;padding-right:12px}.section-config-inputs{grid-template-columns:1fr}.section-tab{padding:7px 10px}}
 </style>
 </head>
 <body>
 <main class="app">
-  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom <span style="font-size:10px;font-weight:650;color:#a79fc2">v3.14.6.2 · 仮称</span></div></div></div>
+  <header class="head"><div class="logo"><div class="logo-icon" aria-hidden="true">♫</div><div><small>SING YOUR SONG.</small><div class="logotype">UtaBloom </div></div></div>
     <div class="head-right top-quick-actions"><button class="nav-btn" id="nav-library" type="button">♫ 曲一覧</button><button class="nav-btn" id="nav-quick" type="button">♫ キーをメモ</button><button class="nav-btn nav-primary" id="nav-new" type="button">＋ 新規登録</button><button class="top-btn" id="guide-again" type="button" hidden>? 使い方</button><button class="top-btn" id="edit-open" type="button" hidden>✎ 曲・歌詞編集</button></div></header>
   <section id="library-view" class="page-view" aria-label="曲一覧">
     <div class="page-intro"><span class="eyebrow">YOUR SONGBOOK</span><h1>歌いたい曲を、<br><em>ここから。</em></h1><p>歌詞に想いを重ねて、自分らしい歌を育てよう。</p></div>
-    <div class="library-head"><h2>♫ マイソング</h2><span class="library-count" id="library-count">0 曲</span></div>
+    <div class="library-head"><h2>♫ マイソング</h2><div class="library-head-stats"><span class="library-count" id="library-count">0 曲</span><span class="library-plan-usage" id="library-plan-usage">無料プラン 0 / 10曲</span></div></div>
     <div class="library-search" role="search" aria-label="登録曲を検索">
       <label for="song-search">曲名・アーティスト名で検索</label>
       <div class="library-search-input">
@@ -431,7 +497,7 @@
       <input type="file" id="library-restore-file" accept=".json,application/json" hidden>
     </div>
     <div class="library-tip" id="library-result-banner" role="status" aria-live="polite" hidden></div>
-    <div class="library-tip" id="library-storage-note" role="status" aria-live="polite">保存先：このブラウザ内（localStorage）。HTMLファイル自体には書き込まれません。大切な内容は「曲一覧をJSONでバックアップ」してください。</div>
+    <div class="library-tip" id="library-storage-note" role="status" aria-live="polite">曲はこのブラウザに保存されます。通常版とは共有されません。必要に応じてJSONでバックアップしてください。</div>
   </section>
   <section id="quick-view" class="page-view" aria-label="クイックキーメモ" hidden>
     <button type="button" id="quick-back" class="back-link">← 曲一覧に戻る</button>
@@ -450,11 +516,10 @@
             <div class="quick-key-stepper"><span>原曲から（半音）</span><div class="quick-stepper-controls"><button type="button" id="quick-key-minus" aria-label="半音下げる">−</button><input id="quick-key-shift" type="number" min="-12" max="12" step="1" value="0" aria-label="半音の変更量"><button type="button" id="quick-key-plus" aria-label="半音上げる">＋</button></div></div>
           </div>
           <div class="reg-field quick-comment"><label for="quick-key-comment">歌った感想・メモ <small>任意</small></label><textarea id="quick-key-comment" maxlength="500" rows="3" placeholder="例：−2で歌いやすい。サビは少しきつい。"></textarea></div>
-          <p class="quick-note-help">このキーは曲一覧・閲覧画面・編集画面に表示されます。</p>
-          <p id="quick-storage-status" class="quick-note-help" role="status" aria-live="polite">保存先：このブラウザ内。必要なら曲一覧からJSONをバックアップできます。</p>
+                    <p id="quick-storage-status" class="quick-note-help" role="status" aria-live="polite">保存先：このブラウザ内。必要なら曲一覧からJSONをバックアップできます。</p>
         </div>
       </div>
-      <div class="reg-form-footer"><div class="reg-note">歌詞なしで保存できます。あとから「歌詞を追加」で同じ曲に付け足せます。</div><div class="reg-buttons"><button type="button" class="reg-save" id="quick-song-save">キーメモを保存 →</button></div><p class="register-feedback" id="quick-form-feedback" role="status" aria-live="polite">⚠ 画面の処理が準備できていません。ファイルをEdgeかChromeで開いてください。</p><p id="quick-click-status" class="quick-note-help" role="status" aria-live="polite">処理待機中</p></div>
+      <div class="reg-form-footer"><div class="reg-note">歌詞なしで保存できます。あとから「歌詞を追加」で同じ曲に付け足せます。</div><div class="reg-buttons"><button type="button" class="reg-save" id="quick-song-save">キーメモを保存 →</button></div><p class="register-feedback" id="quick-form-feedback" role="status" aria-live="polite">曲名とキーを入力して保存できます。</p><p id="quick-click-status" class="quick-note-help" role="status" aria-live="polite" hidden></p></div>
     </form>
   </section>
   <section id="register-view" class="page-view" aria-label="楽曲登録" hidden>
@@ -476,18 +541,18 @@
 
   <section id="reader-view" class="page-view" aria-label="歌唱ノート閲覧" hidden>
     <button type="button" class="back-link" id="reader-back">← 曲一覧に戻る</button>
-    <div class="read-head"><div><span class="eyebrow">SINGING NOTE · VIEW</span><h1 id="reader-song-title">歌唱ノート</h1><div class="read-sub" id="reader-song-sub"></div></div>
+    <div class="read-head"><div><h1 id="reader-song-title">歌唱ノート</h1><div class="read-sub" id="reader-song-sub"></div></div>
       <button type="button" id="reader-to-editor" class="reg-save">✎ 編集する</button></div>
     <div class="read-key" id="reader-key"></div>
     <div class="lyrics-empty-hint" id="reader-no-lyrics" hidden>まだ歌詞を登録していません。<button type="button" id="reader-add-lyrics">＋ 歌詞を追加</button></div>
     <div class="workspace">
-      <div class="workspace-head"><div><span class="workspace-meta">READ ONLY · 練習用の表示</span><h2>歌詞と歌唱メモ</h2></div>
+      <div class="workspace-head"><div><h2>歌詞と歌唱メモ</h2></div>
         <div class="mode-switch" role="group" aria-label="閲覧表示モード"><button type="button" data-read-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-read-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div>
       </div>
-      <div id="reader-lyrics" class="lyrics reader-lyrics" aria-label="歌詞と注釈（閲覧専用）"></div>
+      <div id="reader-section-nav" class="section-navigation" aria-label="閲覧セクション切り替え"></div>
+       <div id="reader-lyrics" class="lyrics reader-lyrics" aria-label="歌詞と注釈（閲覧専用）"></div>
     </div>
-    <p class="helptext">ここは閲覧専用です。記号や歌詞の変更は「編集する」から行ってください。</p>
-  </section>
+      </section>
   <section id="editor-view" class="page-view" aria-label="歌唱ノート編集" hidden>
   <section class="hero"><span class="eyebrow">SINGING NOTEBOOK</span><h1>あなたらしい歌が、<br><em>花ひらくノート。</em></h1><p>歌詞をタップして、歌い方・発音・解釈を重ねよう。<span class="star" aria-hidden="true">✳</span></p></section>
   <div class="lyrics-empty-hint" id="editor-no-lyrics" hidden>この曲はキーメモだけ登録されています。<button type="button" id="editor-add-lyrics">＋ 歌詞を追加して歌唱メモを付ける</button></div>
@@ -503,12 +568,45 @@
   <section class="tutorial" id="tutorial" aria-live="polite" hidden><div class="tutorial-top"><strong id="tutorial-title">1 / 3　歌詞を選択</strong><button type="button" class="link-btn" id="skip-tutorial">スキップ ×</button></div><p id="tutorial-detail">最初の文字と最後の文字を順番にタップ。1文字なら、そのまま記号を選べるよ。</p><div class="tour-bottom"><span class="dots"><i class="dot active"></i><i class="dot"></i><i class="dot"></i></span><span style="font-size:10px;color:#85749a">実際に操作して進めよう</span></div></section>
   <div class="quick-palette" id="quick-palette" aria-label="歌詞を見ながら記号を付ける簡易パレット">
     <span class="quick-context" id="quick-context">文字を2回タップして選択</span>
-    <div class="quick-buttons" id="quick-buttons">
-      <button type="button" data-symbol="↗" title="上げる">↗</button><button type="button" data-symbol="↘" title="下げる">↘</button>
-      <button type="button" data-symbol="息" title="ウィスパー">息</button><button type="button" data-symbol="強" title="強調">強</button>
-      <button type="button" data-symbol="〜" title="ロングトーン">〜</button><button type="button" data-symbol="〰" title="ビブラート">〰</button><button type="button" data-symbol="・" title="範囲内の各文字にアクセント">・</button>
-      <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
-      <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
+    <div class="quick-buttons" id="quick-buttons" aria-label="グループ別の歌唱記号">
+      <div class="quick-symbol-group" role="group" aria-label="抑揚">
+        <span class="quick-symbol-group-name" aria-hidden="true">抑揚</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="↗" title="上げる">↗</button>
+          <button type="button" data-symbol="↘" title="下げる">↘</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="音の持続・変化">
+        <span class="quick-symbol-group-name" aria-hidden="true">音の持続・変化</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="-" title="ロングトーン">-</button>
+          <button type="button" data-symbol="〰" title="ビブラート">〰</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="強弱">
+        <span class="quick-symbol-group-name" aria-hidden="true">強弱</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="・" title="アクセント">・</button>
+          <button type="button" data-symbol="＜" title="だんだん強く" aria-label="クレッシェンド・だんだん強く">＜</button>
+          <button type="button" data-symbol="＞" title="だんだん弱く" aria-label="デクレッシェンド・だんだん弱く">＞</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="声色">
+        <span class="quick-symbol-group-name" aria-hidden="true">声色</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="息" title="ウィスパー">息</button>
+          <button type="button" data-symbol="強" title="強調">強</button>
+          <button type="button" data-symbol="裏" title="裏声">裏</button>
+          <button type="button" data-symbol="エ" title="エッジ">エ</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="ブレス・フレージング">
+        <span class="quick-symbol-group-name" aria-hidden="true">ブレス・フレージング</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
+          <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
+        </div>
+      </div>
     </div>
     <button type="button" class="quick-pron-toggle" id="quick-pron-toggle" aria-pressed="false" title="発音の注釈を入力">あ 発音</button>
     <div class="quick-pron-form" id="quick-pron-form" hidden>
@@ -524,20 +622,51 @@
   <div id="selection-inspector" class="selection-inspector" hidden aria-live="polite"><div class="selection-inspector-head"><span id="selection-inspector-title">選択中の注釈</span> <small>歌詞を選択して編集・削除</small></div><div id="selection-annotations" class="selection-annotations"></div></div>
   </div>
   <section class="workspace" aria-label="歌唱ノート">
-    <div class="workspace-head"><div><div class="workspace-meta">PRACTICE NOTE · LYRICS EDITOR <span class="build-label">v3.14.6.2</span></div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
+    <div class="workspace-head"><div><h2><span class="spark">✦</span> <span id="editor-song-title">歌唱ノート</span></h2><div id="editor-song-sub"></div></div><div class="mode-switch" role="group" aria-label="表示モード"><button type="button" data-mode="marks" aria-pressed="true">♫ 歌唱記号</button><button type="button" data-mode="memo" aria-pressed="false">✎ 解釈メモ</button></div></div>
     <div class="note-caption"><i class="pulse" aria-hidden="true"></i><span id="mode-hint">記号・注釈は表示部分をタップすると直接編集できます</span></div>
-    <div id="lyrics" class="lyrics" aria-label="タップで範囲選択できる歌詞"></div>
+    <div id="editor-section-nav" class="section-navigation" aria-label="編集セクション切り替え"></div>
+     <div class="section-setup">
+       <button type="button" id="section-config-toggle" class="section-setup-toggle" aria-expanded="false">＋ セクションを設定</button>
+       <div class="section-config-body" id="section-config-body" hidden>
+         <p>上の「番・構成」タブで表示を切り替えながら、歌詞の行番号をタップして範囲を選択します。登録済みのセクション名から直接編集でき、既存範囲への上書きも可能です。</p>
+         <div class="section-config-inputs">
+           <label for="section-verse-input">何番<select id="section-verse-input"><option value="1番">1番</option><option value="2番">2番</option><option value="3番">3番</option><option value="4番">4番</option><option value="5番">5番</option><option value="6番">6番</option><option value="7番">7番</option><option value="8番">8番</option><option value="9番">9番</option><option value="10番">10番</option><option value="番なし">番なし</option></select></label>
+         <label for="section-label-input">セクション<select id="section-label-input"><option value="Aメロ">Aメロ</option><option value="Bメロ">Bメロ</option><option value="Cメロ">Cメロ</option><option value="サビ">サビ</option><option value="落ちサビ">落ちサビ</option><option value="ラスサビ">ラスサビ</option><option value="__custom_section_label__">その他（自由入力）</option></select></label>
+            <label for="section-custom-label" class="section-custom-wrapper" id="section-custom-wrapper" hidden>セクション名（30文字以内）<input type="text" id="section-custom-label" maxlength="30" placeholder="例：ブリッジ、語り、Dメロ" autocomplete="off"></label>
+         </div>
+         <div id="section-range-status" class="section-range-status" role="status">まだ行が選択されていません。</div>
+         <div class="section-config-actions"><button type="button" id="section-save" class="reg-save">セクションを保存</button><button type="button" id="section-cancel" class="secondary-action">選択を解除</button></div>
+         <div id="section-existing" class="section-existing" aria-label="登録済みセクション"></div>
+       </div>
+     </div>
+     <div id="lyrics" class="lyrics" aria-label="タップで範囲選択できる歌詞"></div>
   </section>
   <div class="selection-progress" aria-live="polite" id="selection-progress"><span>選択操作</span><span class="stage active" id="select-start-stage">① 開始位置</span><span class="stage" id="select-end-stage">② 終了位置</span><span class="stage" id="select-done-stage">✓ 確定</span></div>
   <div class="selection-bar" role="status" aria-live="polite"><div><p id="selection-status">まず歌詞の開始文字をタップしてね。</p><div class="selection-tip" id="edit-message"></div></div><button class="mini-btn" type="button" id="clear">選択を解除</button></div>
 
   <section class="panel" id="editor-panel">
-    <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3><small>何個でも追加OK・「・」は各文字へ</small></div><div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button></div><p class="helptext">「息」はウィスパー、「強」は強調。どちらも歌詞の文字色で表現し、上の記号や下線は表示しません。息継ぎは「ブレスを挿入」で設定します。</p>
-      <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎの位置）</h3><small>行の先頭・末尾・文字間に挿入</small></div>
+    <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3></div>
+      <p class="helptext mark-help">歌い方に合わせてグループから記号を選べます。文字・フレーズ単位で設定できます。</p>
+      <div class="notation-groups" id="symbol-grid" aria-label="歌唱記号の分類">
+        <section class="notation-group" role="group" aria-label="抑揚">
+          <h4 class="notation-group-heading">抑揚</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button></div>
+        </section>
+        <section class="notation-group" role="group" aria-label="音の持続・変化">
+          <h4 class="notation-group-heading">音の持続・変化</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="-">-<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button></div>
+        </section>
+        <section class="notation-group" role="group" aria-label="強弱">
+          <h4 class="notation-group-heading">強弱</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
+        </section>
+      </div>
+      <h4 class="voice-group-heading">声色 <small>歌詞の文字色で表示します</small></h4>
+      <div class="symbol-grid voice-color-grid" id="voice-grid" role="group" aria-label="声色"><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="裏">裏<small>裏声</small></button><button type="button" class="symbol" data-symbol="エ">エ<small>エッジ</small></button></div>
+      <div class="breath-editor" role="group" aria-label="ブレス・フレージング"><div class="panel-head"><h4 class="notation-group-heading">ブレス・フレージング</h4></div>
+        <p class="helptext breath-help">行頭・行末・文字間をタップして、追加・解除できます。</p>
         <button type="button" id="breath-toggle" class="breath-toggle" aria-pressed="false">＋ ブレスを挿入</button>
-        <p class="helptext">オンにすると、各行の先頭・末尾と文字間に「＋」が表示されます。タップすると「∨」を挿入し、もう一度タップすると解除できます。</p>
-        <button type="button" id="separator-toggle" class="separator-toggle" aria-pressed="false">＋ / 区切りを挿入</button>
-        <p class="helptext">「/」はフレーズの区切りです。行頭・行末・文字間をタップして追加・解除できます。</p>
+        <button type="button" id="separator-toggle" class="separator-toggle" aria-pressed="false">＋ 区切りを挿入</button>
       </div>
       <div class="pron-editor"><div class="panel-head"><h3>あ 発音の注釈</h3><small>読み方・歌うときの発音</small></div>
         <label for="pron-input">選択範囲に付ける発音のヒント</label>
@@ -549,8 +678,8 @@
   <section class="panel" hidden aria-hidden="true"><div class="panel-head"><h3 id="list-title">つけた記号 <span id="count">0</span></h3></div><div id="entry-list"></div></section>
 
 
-  <div class="editor-savebar"><span id="save-state" role="status">自動保存済み</span><button type="button" id="manual-save">✓ 保存する</button></div>
-  <footer class="footer"><div class="footer-left"><span id="storage-message">入力後に自動保存・成功時刻を表示</span><span>・</span><span>UtaBloom（仮称）プロトタイプ v3.14.6.2</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
+  <div class="editor-savebar"><span id="save-state" role="status">自動保存済み</span><button type="button" id="manual-save">✓ 保存して閲覧へ</button></div>
+  <footer class="footer"><div class="footer-left"><span id="storage-message">保存状況を確認できます</span></div><div class="data-tools"><button type="button" id="undo">↶ 元に戻す</button><button type="button" id="export">↓ データ保存</button><button type="button" id="import">↑ 読み込む</button><button type="button" id="reset">注釈を全削除</button></div></footer>
   <input id="import-input" type="file" accept="application/json,.json" hidden>
   </section>
 </main>
@@ -566,11 +695,18 @@
 const KEY='utanote-prototype-v3'; // legacy v3.5 key (never overwritten)
 const LIBRARY_KEY='utanote-prototype-v36-library';
 const GUIDE_KEY='utanote-guide-v3';
+// Temporary client-side plan limits; subscription verification requires a backend.
+const PLAN_SONG_LIMITS=Object.freeze({free:10});
+const ACTIVE_PLAN='free';
 const DEFAULT='窓の向こうで光が揺れる\n昨日の迷いも歌になって\n今夜の空へ声を放とう';
 const $=id=>document.getElementById(id);
-let data={text:DEFAULT,marks:[],memos:[],prons:[],breaths:[],separators:[]};
+let data={text:DEFAULT,marks:[],memos:[],prons:[],breaths:[],separators:[],sections:[]};
 let songs=[],currentSongId=null,editingSongId=null,formOrigin='library',lastView='library';
-let mode='marks',breathMode=false,separatorMode=false,start=null,end=null,selectionDone=false,editingMark=null,history=[],guideStep=0,guideVisible=false,flashRange=null,toastTimer,pendingMemo=false,pendingPron=false,quickPronOpen=false;
+function currentSongLimit(){return PLAN_SONG_LIMITS[ACTIVE_PLAN]}
+function canAddSong(){return songs.length<currentSongLimit()}
+function newSongLimitMessage(){return '無料プランでは'+currentSongLimit()+'曲まで登録できます。既存の曲は引き続き編集できます。'}
+let sectionEditActive=false,sectionPickStart=null,sectionPickEnd=null,sectionPickPhase=0,sectionEditId=null,sectionViewVerse='all',sectionViewLabel='all';
+ let mode='marks',breathMode=false,separatorMode=false,start=null,end=null,selectionDone=false,editingMark=null,history=[],guideStep=0,guideVisible=false,flashRange=null,toastTimer,pendingMemo=false,pendingPron=false,quickPronOpen=false;
 const els={lyrics:$('lyrics'),list:$('entry-list'),status:$('selection-status'),panelMarks:$('marks-panel'),panelMemo:$('memo-panel'),memoInput:$('memo-input'),pronInput:$('pron-input')};
 
 // A single color mapping is shared by the palette, lyric annotations, and edit list.
@@ -579,10 +715,17 @@ const MARK_STYLE={
  '↘':{color:'#bd446e',bg:'#fff0f5',border:'#f2d2df'},
  '息':{color:'#177b76',bg:'#e9f8f5',border:'#c9eae4'},
  '強':{color:'#a15e17',bg:'#fff3e5',border:'#f2dfc0'},
- '〜':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
+ '裏':{color:'#654ab5',bg:'#f1edff',border:'#dcd3f6'},
+ 'エ':{color:'#b54362',bg:'#fff0f4',border:'#f2d1dd'},
+ '-':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
  '〰':{color:'#7d4caa',bg:'#f5efff',border:'#e2d1f6'},
- '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'}
+ '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'},
+ '＜':{color:'#277f65',bg:'#eaf8f0',border:'#cde9dd'},
+ '＞':{color:'#b45c3a',bg:'#fff2ea',border:'#f2dbcc'}
 };
+const VOICE_TONES=['息','強','裏','エ']; // Text-color marks, not overhead glyphs.
+const VOICE_TONE_NAMES={'息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ'};
+const VOICE_TONE_PRIORITY=['エ','裏','強','息']; // Do not erase overlapping annotations.
 function applyTone(el,symbol){const t=MARK_STYLE[symbol];if(!t)return;el.dataset.tone=symbol;el.style.setProperty('--tone',t.color);el.style.setProperty('--tone-bg',t.bg);el.style.setProperty('--tone-line',t.border)}
 document.querySelectorAll('[data-symbol]').forEach(b=>applyTone(b,b.dataset.symbol));
 
@@ -595,13 +738,31 @@ function normalizeKeyInfo(o){return {original:typeof o?.original==='string'?o.or
 function libraryKeyLabel(song){const shift=normalizeKeyInfo(song?.keyInfo).shift;return shift===0?'原キー':(shift>0?'+':'')+shift}
 function keySummary(song){const k=normalizeKeyInfo(song?.keyInfo);const bits=[];if(k.original)bits.push('原曲キー '+k.original);if(k.shift!==0||k.original)bits.push('原曲から '+(k.shift>0?'+':'')+k.shift+' 半音');if(k.comment)bits.push(k.comment);return bits.join(' ｜ ')||'キーメモ未設定'}
 function setSaveState(label,failed=false){const el=$('save-state');if(el){el.textContent=label;el.style.color=failed?'#b13959':'#74698f'}}
-function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','〜','〰','・'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators)}}
+
+function normalizedSections(items,text){
+ const maxLines=text.length?text.split('\n').length:0;
+ const out=[],used=new Set();
+ const raw=Array.isArray(items)?items:[];
+ raw.filter(x=>x&&Number.isInteger(x.startLine)&&Number.isInteger(x.endLine)
+   &&x.startLine>=0&&x.endLine>=x.startLine&&x.endLine<maxLines
+   &&typeof x.verse==='string'&&x.verse.trim()&&typeof x.label==='string'&&x.label.trim())
+   .map(x=>({id:String(x.id||newId()),startLine:x.startLine,endLine:x.endLine,
+      verse:x.verse.trim().slice(0,30),label:x.label.trim().slice(0,30)}))
+   .sort((a,b)=>a.startLine-b.startLine||a.endLine-b.endLine)
+   .forEach(sec=>{
+     for(let i=sec.startLine;i<=sec.endLine;i++)if(used.has(i))return;
+     for(let i=sec.startLine;i<=sec.endLine;i++)used.add(i);
+     out.push(sec);
+   });
+ return out;
+}
+function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','裏','エ','-','〜','～','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:(x.symbol==='〜'||x.symbol==='～')?'-':x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
 function refreshStorageStatus(){
  const library=$('library-storage-note');
  const quick=$('quick-storage-status');
  if(storageOK){
-  library.textContent='保存先：このブラウザ内（localStorage）。HTMLファイルや端末の「ダウンロード」には自動作成されません。別のHTMLファイル・ブラウザではデータが共有されないことがあります。曲一覧の「JSONでバックアップ」を利用してください。';
-  quick.textContent='保存先：このブラウザ内。保存後は曲一覧に表示されます。別のファイルへ移すにはJSONバックアップが必要です。';
+  library.textContent='曲はこのブラウザに保存されます。通常版とは共有されないため、必要に応じて曲一覧をJSONでバックアップしてください。';
+  quick.textContent='曲はこのブラウザに保存されます。別の端末に移すときはJSONでバックアップしてください。';
   quick.classList.remove('is-warning');
  }else{
   library.textContent='⚠ この環境ではブラウザへの永続保存ができません。曲はこの画面内に一時登録され、保存時にバックアップJSONのダウンロードを試みます。再読込前にJSONファイルを保管し、次回は「JSONから曲一覧を復元」してください。';
@@ -726,7 +887,149 @@ function displayMarks(raw){
 function escapeAttr(v){return String(v).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
 function choose(i){if(breathMode||separatorMode)return;flushNoteDrafts(false);closeQuickEdit();if(start===null||selectionDone){start=i;end=i;selectionDone=false;editingMark=null}else{end=i;selectionDone=true;if(guideVisible&&guideStep===0){guideStep=1;updateGuide()}}loadMemoForRange();loadPronForRange();render()}
 function clearSelection(){flushNoteDrafts(false);closeQuickEdit();start=null;end=null;selectionDone=false;editingMark=null;els.memoInput.value='';$('quick-memo-input').value='';els.pronInput.value='';$('quick-pron-input').value='';pendingMemo=false;pendingPron=false;render()}
-function render(){renderLyrics();renderStatus();renderList();renderToolbar();renderSelectionInspector();$('undo').disabled=history.length===0}
+
+function sectionPickRange(){
+ if(sectionPickStart===null)return null;
+ return {startLine:Math.min(sectionPickStart,sectionPickEnd??sectionPickStart),
+   endLine:Math.max(sectionPickStart,sectionPickEnd??sectionPickStart)};
+}
+function chooseSectionLine(i){
+ if(!sectionEditActive)return;
+ if(sectionPickPhase===0||sectionPickPhase===2){sectionPickStart=i;sectionPickEnd=i;sectionPickPhase=1}
+ else{sectionPickEnd=i;sectionPickPhase=2}
+ render();
+}
+const SECTION_VERSES=[...Array.from({length:10},(_,i)=>(i+1)+'番'),'番なし'];
+const SECTION_LABELS=['Aメロ','Bメロ','Cメロ','サビ','落ちサビ','ラスサビ'];
+const SECTION_CUSTOM_VALUE='__custom_section_label__';
+function updateSectionCustomField(){
+ const custom=$('section-label-input').value===SECTION_CUSTOM_VALUE;
+ $('section-custom-wrapper').hidden=!custom;
+ $('section-custom-label').disabled=!custom;
+}
+function setSectionSelectValue(id,value){
+ const select=$(id);
+ select.querySelectorAll('option[data-legacy]').forEach(option=>option.remove());
+ if(id==='section-label-input'){
+   if(!SECTION_LABELS.includes(value)){
+     select.value=SECTION_CUSTOM_VALUE;
+     $('section-custom-label').value=String(value||'').slice(0,30);
+   }else{
+     select.value=value;
+     $('section-custom-label').value='';
+   }
+   updateSectionCustomField();return;
+ }
+ if(!Array.from(select.options).some(option=>option.value===value)){
+   const legacy=document.createElement('option');legacy.value=value;
+   legacy.textContent=value+'（以前の設定）';legacy.dataset.legacy='true';select.appendChild(legacy);
+ }
+ select.value=value;
+}
+function resetSectionSelection(){
+ sectionPickStart=null;sectionPickEnd=null;sectionPickPhase=0;sectionEditId=null;
+ setSectionSelectValue('section-verse-input','1番');
+ setSectionSelectValue('section-label-input','Aメロ');
+ $('section-save').textContent='セクションを保存';render();
+}
+function toggleSectionConfig(){
+ flushNoteDrafts(false);sectionEditActive=!sectionEditActive;
+ if(sectionEditActive){start=null;end=null;selectionDone=false}
+ else{sectionPickStart=null;sectionPickEnd=null;sectionPickPhase=0;sectionEditId=null}
+ $('section-config-body').hidden=!sectionEditActive;
+ $('editor-view').querySelector('.workspace').classList.toggle('section-editing',sectionEditActive);
+ $('section-config-toggle').setAttribute('aria-expanded',String(sectionEditActive));
+ $('section-config-toggle').textContent=sectionEditActive?'× セクション設定を閉じる':'＋ セクションを設定';
+ render();
+}
+// Overwrite selected lines; keep other sections' unselected lines.
+function replaceSectionRange(sections,range,verse,label,editingId){
+ const editing=sections.find(x=>x.id===editingId);
+ const exact=!editing&&sections.find(x=>x.startLine===range.startLine&&x.endLine===range.endLine);
+ const id=editing?.id||exact?.id||newId();
+ const output=[];
+ for(const sec of sections){
+  if(sec.id===id||sec.id===editingId)continue;
+  if(sec.endLine<range.startLine||sec.startLine>range.endLine){output.push(sec);continue}
+  if(sec.startLine<range.startLine)output.push({...sec,endLine:range.startLine-1});
+  if(sec.endLine>range.endLine)output.push({...sec,id:sec.startLine<range.startLine?newId():sec.id,startLine:range.endLine+1});
+ }
+ output.push({id,verse,label,...range});
+ return output.sort((a,b)=>a.startLine-b.startLine);
+}
+function saveSection(){
+ const range=sectionPickRange(),verse=$('section-verse-input').value.trim(),
+       labelChoice=$('section-label-input').value,
+       label=(labelChoice===SECTION_CUSTOM_VALUE?$('section-custom-label').value:labelChoice).trim();
+ if(!range){toast('最初に歌詞の行番号をタップしてください');return}
+ if(!verse){toast('何番を選んでください');return}
+ if(!label){toast('セクション名を入力してください');if(labelChoice===SECTION_CUSTOM_VALUE)$('section-custom-label').focus();return}
+ if(label.length>30){toast('セクション名は30文字以内で入力してください');return}
+ const editing=(data.sections||[]).find(x=>x.id===sectionEditId);
+ if(!SECTION_VERSES.includes(verse)&&(!editing||editing.verse!==verse)){toast('何番は1番〜10番・番なしから選んでください');return}
+ if(labelChoice!==SECTION_CUSTOM_VALUE&&!SECTION_LABELS.includes(label)&&(!editing||editing.label!==label)){
+   toast('セクション名を選び直してください');return;
+ }
+ const overlaps=(data.sections||[]).filter(x=>x.id!==sectionEditId&&x.startLine<=range.endLine&&range.startLine<=x.endLine);
+ if(overlaps.length){
+  const description=overlaps.map(x=>x.verse+' / '+x.label+'（'+(x.startLine+1)+'〜'+(x.endLine+1)+'行目）').join('\n');
+  if(!confirm('既存のセクションに重なっています。\n\n'+description+'\n\n'
+    +(range.startLine+1)+'〜'+(range.endLine+1)+'行目を「'+verse+' / '+label+'」で上書きしますか？'
+    +'\n（選択範囲外の設定は残ります。元に戻すこともできます。）'))return;
+ }
+ const isOverwrite=!!editing||overlaps.length>0;
+ change(()=>{data.sections=replaceSectionRange(data.sections||[],range,verse,label,sectionEditId)});
+ resetSectionSelection();toast('「'+verse+' / '+label+'」を'+(isOverwrite?'上書き':'登録')+'しました');
+}
+function renderSectionSetup(){
+ if(!sectionEditActive)return;
+ const r=sectionPickRange();
+ $('section-range-status').textContent=r?'選択中：'+(r.startLine+1)+'〜'+(r.endLine+1)+'行目':'未選択：歌詞の行番号をタップしてください';
+ const list=$('section-existing');list.replaceChildren();
+ for(const sec of data.sections||[]){
+   const item=document.createElement('div');item.className='section-existing-item';
+   const name=document.createElement('span');name.textContent=sec.verse+' / '+sec.label+'（'+(sec.startLine+1)+'〜'+(sec.endLine+1)+'行目）';
+   const buttons=document.createElement('span');
+   for(const [nameText,key] of [['編集','sectionEdit'],['削除','sectionDelete']]){
+     const b=document.createElement('button');b.type='button';b.textContent=nameText;b.dataset[key]=sec.id;buttons.appendChild(b);
+   }
+   item.append(name,buttons);list.appendChild(item);
+ }
+}
+function renderSectionNavigation(target){
+ if(!target)return;
+ if(target.id==='editor-section-nav')target.hidden=false;
+ target.replaceChildren();
+ const all=data.sections||[],verses=[...new Set(all.map(x=>x.verse))];
+ if(sectionViewVerse!=='all'&&!verses.includes(sectionViewVerse))sectionViewVerse='all';
+ function row(label,values,key,selected){
+   const wrap=document.createElement('div');wrap.className='section-nav-row';
+   const caption=document.createElement('span');caption.className='section-nav-caption';caption.textContent=label;wrap.appendChild(caption);
+   for(const v of values){
+     const b=document.createElement('button');b.type='button';b.className='section-tab';
+     b.textContent=v==='all'?(key==='sectionVerse'?'全体':'すべて'):v;
+     b.dataset[key]=v;b.setAttribute('aria-current',String(v===selected));wrap.appendChild(b);
+   }
+   target.appendChild(wrap);
+ }
+ row('歌詞',['all',...verses],'sectionVerse',sectionViewVerse);
+ // Keep all four section choices visible, even before the user has registered them.
+ const labels=[...new Set([...SECTION_LABELS,...all.map(x=>x.label)])];
+ row('構成',['all',...labels],'sectionLabel',sectionViewLabel);
+ if(!all.length){
+   const hint=document.createElement('div');hint.className='section-nav-empty';
+   hint.textContent='セクションはまだ未設定です。メロを選ぶと、該当する行だけが表示されます。';target.appendChild(hint);
+ }
+}
+function selectSectionTab(e){
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.sectionVerse!==undefined)sectionViewVerse=b.dataset.sectionVerse
+ else if(b.dataset.sectionLabel!==undefined)sectionViewLabel=b.dataset.sectionLabel;
+ else return;
+ flushNoteDrafts(false);start=null;end=null;selectionDone=false;
+ if(lastView==='reader')renderReader();else render();
+}
+function render(){renderLyrics();renderSectionNavigation($('editor-section-nav'));renderSectionSetup();renderStatus();renderList();renderToolbar();renderSelectionInspector();$('undo').disabled=history.length===0}
 function renderLyrics(target=els.lyrics,readOnly=false){
  target.classList.toggle('memo-view',mode==='memo');
  const all=chars(),sel=selected(),markAt=new Map(),memoAt=new Set(),pronAt=new Set(),breathAt=new Set(data.breaths.map(b=>b.pos)),separatorAt=new Set((data.separators||[]).map(b=>b.pos));
@@ -755,6 +1058,22 @@ function renderLyrics(target=els.lyrics,readOnly=false){
  function finish(lineEnd){
   // Boundary positions are distinct on both sides of a newline: end before \n, start after \n.
   lineText.appendChild(makeGap(lineEnd+1,'end'));
+  if(!readOnly&&sectionEditActive&&data.text.length){
+    const lineIndex=rows.length;
+    const existing=(data.sections||[]).find(sec=>lineIndex>=sec.startLine&&lineIndex<=sec.endLine);
+    if(existing){
+      const badge=document.createElement('button');badge.type='button';badge.className='section-current-badge';
+      badge.dataset.sectionOpen=existing.id;badge.dataset.editing=String(existing.id===sectionEditId);
+      badge.textContent=existing.verse+' / '+existing.label+' ✎';
+      badge.title='このセクションを上書き編集';
+      badge.setAttribute('aria-label',existing.verse+' / '+existing.label+'を編集');
+      line.appendChild(badge);
+    }
+    const picker=document.createElement('button');picker.type='button';picker.className='section-line-pick';
+    picker.dataset.sectionLine=String(lineIndex);picker.textContent=(lineIndex+1)+'行目を選択';
+    const r=sectionPickRange(),chosen=!!r&&lineIndex>=r.startLine&&lineIndex<=r.endLine;
+    picker.setAttribute('aria-pressed',String(chosen));line.appendChild(picker);
+   }
   line.appendChild(lineText);target.appendChild(line);
   rows.push({line,text:lineText,start:lineStart,end:lineEnd});
  }
@@ -770,14 +1089,13 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Earlier versions painted both on the same bottom line, hiding the reading's teal color.
   if(mode==='marks'){
    const symbols=markAt.get(i)||[];
-   const underlineSymbols=[...new Set(symbols.filter(symbol=>symbol!=='息'&&symbol!=='強'))];
+   const underlineSymbols=[...new Set(symbols.filter(symbol=>!VOICE_TONES.includes(symbol)))];
    const hasMark=underlineSymbols.length>0,hasPron=pronAt.has(i);
-   // Emphasis and whisper are text colors, never badges or underlines.
-   // If both apply, emphasis has a fixed visual priority; both remain editable.
-   const textTone=symbols.includes('強')?'強':symbols.includes('息')?'息':null;
+   // Voice tone displays as text color. A priority resolves overlapping ranges without deleting marks.
+   const textTone=VOICE_TONE_PRIORITY.find(symbol=>symbols.includes(symbol));
    if(textTone){
-     span.style.color=MARK_STYLE[textTone].color;
-     span.title=[symbols.includes('強')?'強調':null,symbols.includes('息')?'ウィスパー':null].filter(Boolean).join('・')+'（文字色）';
+    span.style.color=MARK_STYLE[textTone].color;
+    span.title=VOICE_TONES.filter(symbol=>symbols.includes(symbol)).map(symbol=>VOICE_TONE_NAMES[symbol]).join('・')+'（声色・文字色）';
    }
    if(hasMark)span.classList.add('marked');
    if(hasPron)span.classList.add('pronounced');
@@ -836,7 +1154,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Separate annotation types before layout; do not merge pronunciation with singing marks.
   const current=[];
   if(mode==='marks'){
-    displayMarks(data.marks.filter(m=>m.symbol!=='息'&&m.symbol!=='強')).filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
+    displayMarks(data.marks.filter(m=>!VOICE_TONES.includes(m.symbol))).filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
       current.push({kind:m.symbol==='・'?'accent':'mark',start:m.start,end:m.end,marks:[m],prons:[],memos:[]});
     });
     data.prons.filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
@@ -893,7 +1211,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Distant annotations reuse the lowest lane instead of floating above empty rows.
   located.forEach((items,v)=>{
     const rank={pron:0,accent:1,mark:2,memo:0};
-    const symbolOrder=['↗','↘','息','強','〜','〰'];
+    const symbolOrder=['↗','↘','息','強','裏','エ','-','〰','＜','＞'];
     const placed=[];
     const intersects=(a,b)=>a.start<=b.end&&b.start<=a.end;
     const ordered=[...items].sort((a,b)=>rank[a.kind]-rank[b.kind]
@@ -944,27 +1262,53 @@ function renderLyrics(target=els.lyrics,readOnly=false){
     });
   });
  });
+ // Hide only visual lines; annotation offsets still refer to the full lyric text.
+ let previous=null;
+ rows.forEach((row,i)=>{
+   const sec=(data.sections||[]).find(x=>i>=x.startLine&&i<=x.endLine);
+   const visible=(sectionViewVerse==='all'&&sectionViewLabel==='all')||
+      (!!sec&&(sectionViewVerse==='all'||sec.verse===sectionViewVerse)
+        &&(sectionViewLabel==='all'||sec.label===sectionViewLabel));
+   row.line.hidden=!visible;
+   if(!visible){previous=null;return}
+   if(!sectionEditActive&&sec&&(i===sec.startLine||previous!==sec.id)){
+      const h=document.createElement('div');h.className='section-row-title';h.textContent=sec.verse+' / '+sec.label;
+      target.insertBefore(h,row.line);
+   }
+   previous=sec?.id||null;
+ });
+ if((sectionViewVerse!=='all'||sectionViewLabel!=='all')&&!rows.some(row=>!row.line.hidden)){
+   const empty=document.createElement('div');empty.className='section-filter-empty';
+   empty.setAttribute('role','status');
+   empty.textContent='該当するセクションはありません。「すべて」または「全体」で表示を切り替えてください。';
+   target.appendChild(empty);
+ }
  if(flashRange)flashRange=null
 }
 function renderStatus(){updateSelectionProgress();if(mode==='marks'&&separatorMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='区切り挿入中：＋をタップして「/」を配置。通常の記号は挿入モードを終了すると選べます。';return}if(mode==='marks'&&breathMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='ブレス挿入中：＋をタップして「∨」を配置。通常の記号は挿入モードを終了すると選べます。';return}const sel=selected();if(editingMark){const mark=data.marks.find(m=>m.id===editingMark);$('edit-message').textContent=mark?'変更中：現在の「'+mark.symbol+'」を、下のボタンで置き換えます。':'';document.querySelector('.selection-bar').classList.toggle('edit-active',!!mark)}else{document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent=''}if(!sel){els.status.textContent='まず歌詞の開始文字をタップしてね。';return}const text=excerpt(sel.start,sel.end);if(!selectionDone){els.status.textContent='「'+text+'」から選択中。終了文字をタップ（1文字ならそのまま記号を選択）';return}els.status.textContent='選択：「'+text+'」  →  下で'+(mode==='marks'?'記号や発音注釈を追加':'メモを入力')}
-function updateSelectionProgress(){const stage=(breathMode||separatorMode)?'breath':start===null?'start':selectionDone?'done':'end';$('select-start-stage').classList.toggle('active',stage==='start');$('select-end-stage').classList.toggle('active',stage==='end');$('select-done-stage').classList.toggle('active',stage==='done');$('selection-progress').hidden=stage==='breath'}
+function updateSelectionProgress(){const stage=(breathMode||separatorMode)?'breath':start===null?'start':selectionDone?'done':'end';$('select-start-stage').classList.toggle('active',stage==='start');$('select-end-stage').classList.toggle('active',stage==='end');$('select-done-stage').classList.toggle('active',stage==='done');$('selection-progress').hidden=stage==='breath'||sectionEditActive}
 function renderToolbar(){
  $('breath-toggle').setAttribute('aria-pressed',String(breathMode));
  $('breath-toggle').textContent=breathMode?'✓ ブレス挿入を終了':'＋ ブレスを挿入';
  $('separator-toggle').setAttribute('aria-pressed',String(separatorMode));
- $('separator-toggle').textContent=separatorMode?'✓ / 区切り挿入を終了':'＋ / 区切りを挿入';
+ $('separator-toggle').textContent=separatorMode?'✓ 区切り挿入を終了':'＋ 区切りを挿入';
  $('quick-breath').setAttribute('aria-pressed',String(breathMode));
  $('quick-separator').setAttribute('aria-pressed',String(separatorMode));
  const insertionActive=breathMode||separatorMode;
- document.querySelectorAll('#quick-buttons [data-symbol], #symbol-grid [data-symbol]').forEach(b=>{
+ document.querySelectorAll('#quick-buttons [data-symbol], #symbol-grid [data-symbol], #voice-grid [data-symbol]').forEach(b=>{
   b.disabled=insertionActive;
-  if(!b.dataset.normalTitle)b.dataset.normalTitle=b.title;
-  b.title=insertionActive?'挿入モードを終了すると選べます':b.dataset.normalTitle;
+  // The lower symbol grid already has visible captions for these two marks.
+  const noTooltip=b.closest('#symbol-grid')&&(b.dataset.symbol==='＜'||b.dataset.symbol==='＞');
+  if(noTooltip){b.removeAttribute('title');return}
+  if(b.dataset.normalTitle===undefined)b.dataset.normalTitle=b.getAttribute('title')||'';
+  if(insertionActive)b.title='挿入モードを終了すると選べます';
+  else if(b.dataset.normalTitle)b.title=b.dataset.normalTitle;
+  else b.removeAttribute('title');
  });
  $('quick-pron-toggle').disabled=insertionActive;
  $('pron-save').disabled=insertionActive;
  $('quick-pron-save').disabled=insertionActive;
- $('quick-palette').hidden=false;
+ $('quick-palette').hidden=sectionEditActive;
  $('quick-buttons').hidden=mode!=='marks';
  $('quick-pron-toggle').hidden=mode!=='marks';
  $('quick-pron-form').hidden=!quickPronOpen||mode!=='marks'||insertionActive;
@@ -972,7 +1316,8 @@ function renderToolbar(){
  $('quick-pron-toggle').setAttribute('aria-pressed',String(quickPronOpen));
  const sel=selected();$('quick-context').textContent=separatorMode?'/ の挿入位置をタップ':breathMode?'∨ の挿入位置をタップ':!sel?'開始文字をタップ':!selectionDone?'終了文字をタップ':('選択：'+excerpt(sel.start,sel.end).slice(0,14));
  // In memo mode the sticky editor replaces the duplicate bottom editor.
- $('editor-panel').hidden=mode==='memo';
+ $('editor-panel').hidden=mode==='memo'||sectionEditActive;
+ document.querySelector('.selection-bar').hidden=sectionEditActive;
  els.panelMarks.hidden=mode!=='marks';els.panelMemo.hidden=true;
  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
  $('mode-hint').textContent=mode==='marks'?'歌詞の文字をタップして範囲を選ぶと、付いている記号を下で変更・削除できます':'歌詞の一部分に、自分の解釈やイメージを残そう';
@@ -982,7 +1327,7 @@ function renderToolbar(){
 function renderSelectionInspector(){
  const root=$('selection-inspector'),box=$('selection-annotations');box.replaceChildren();
  const sel=selected();
- if(!sel||breathMode||separatorMode){root.hidden=true;return}
+ if(sectionEditActive||!sel||breathMode||separatorMode){root.hidden=true;return}
  const nearby=(mode==='memo'?data.memos:[...data.marks,...data.prons])
    .filter(item=>item.start<=sel.end&&item.end>=sel.start)
    .sort((a,b)=>a.start-b.start||a.end-b.end);
@@ -996,13 +1341,15 @@ function renderSelectionInspector(){
   empty.textContent='この範囲にはまだ注釈がありません';
   box.appendChild(empty);
  }
- const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','〜':'ロングトーン','〰':'ビブラート','・':'アクセント'};
+ const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ','-':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
  for(const item of nearby){
   const scope=document.createElement('div');scope.className='scoped-annotation';
   const label=document.createElement('span');label.className='scope-label';
+  // Prioritize the edited lyric instead of repeating the mark category.
   const targetText=document.createElement('strong');targetText.className='scope-target';
   targetText.textContent='「'+excerpt(item.start,item.end).slice(0,22)+'」';
   label.appendChild(targetText);
+  // Context uses original lyric offsets (not visual browser-wrapped rows).
   const full=chars();
   // Keep the current lyric line boundaries for the surrounding text preview.
   // Row/column numbers are not needed in the UI or for editing.
@@ -1084,7 +1431,7 @@ $('selection-annotations').addEventListener('click',event=>{
 
 // v3.10 direct edit: actual saved records stay separate even when visually connected.
 let quickEditRange=null,quickEditAnchor=null;
-const QUICK_SYMBOLS=['↗','↘','息','強','〜','〰','・'];
+const QUICK_SYMBOLS=['↗','↘','息','強','裏','エ','-','〰','・','＜','＞'];
 function closeQuickEdit(){quickEditRange=null;quickEditAnchor=null;$('quick-edit').hidden=true}
 function quickItems(){
  if(!quickEditRange)return [];
@@ -1126,7 +1473,7 @@ function showQuickEdit(){
       }else{data.marks.splice(pos,1)}
      });
      showQuickEdit();toast('記号を変更しました');
-    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(symbol==='・'?'アクセント':'「'+symbol+'」')+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
+    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(VOICE_TONE_NAMES[symbol]||(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」'))+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
    }
    section.append(buttons)
   }else{
@@ -1208,7 +1555,7 @@ function renderList(){
   header.append(label,actions);row.appendChild(header);
   if(mode==='marks'){
    const tags=document.createElement('div');tags.className='entry-tags';
-   const symbolOrder=['↗','↘','息','強','〜','〰','・'];
+   const symbolOrder=['↗','↘','息','強','裏','エ','-','〰','・','＜','＞'];
    g.items.filter(item=>item.symbol).slice().sort((a,b)=>symbolOrder.indexOf(a.symbol)-symbolOrder.indexOf(b.symbol)).forEach(item=>{
      const chip=document.createElement('span');chip.className='tag';applyTone(chip,item.symbol);
      const edit=document.createElement('button');edit.type='button';edit.textContent=item.symbol+' ✎';edit.title='この記号を変更';edit.dataset.editId=item.id;
@@ -1307,6 +1654,19 @@ function toggleInsertPoint(type,pos){
  }
 }
 els.lyrics.addEventListener('click',e=>{
+ const sectionBadge=e.target.closest('[data-section-open]');
+ if(sectionBadge){
+  const sec=(data.sections||[]).find(x=>x.id===sectionBadge.dataset.sectionOpen);
+  if(sec&&sectionEditActive){
+   sectionEditId=sec.id;sectionPickStart=sec.startLine;sectionPickEnd=sec.endLine;sectionPickPhase=2;
+   setSectionSelectValue('section-verse-input',sec.verse);
+   setSectionSelectValue('section-label-input',sec.label);
+   $('section-save').textContent='変更を上書き保存';render();
+  }
+  return;
+ }
+ const picker=e.target.closest('[data-section-line]');if(picker){chooseSectionLine(Number(picker.dataset.sectionLine));return}
+ if(sectionEditActive)return;
  const slash=e.target.closest('[data-separator]');
  if(slash){toggleInsertPoint('separator',Number(slash.dataset.separator));return}
  const gap=e.target.closest('[data-gap]');
@@ -1315,6 +1675,7 @@ els.lyrics.addEventListener('click',e=>{
  const chip=e.target.closest('[data-range-start]');if(chip){openQuickEdit(Number(chip.dataset.rangeStart),Number(chip.dataset.rangeEnd),chip)}
 });
 $('symbol-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
+$('voice-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('quick-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('breath-toggle').addEventListener('click',()=>toggleInsertMode('breath'));
 $('separator-toggle').addEventListener('click',()=>toggleInsertMode('separator'));
@@ -1340,7 +1701,46 @@ $('reader-to-editor').addEventListener('click',()=>openSong(currentSongId));
 $('reader-add-lyrics').addEventListener('click',()=>openForm(currentSongId,'reader'));
 $('editor-add-lyrics').addEventListener('click',()=>openForm(currentSongId,'editor'));
 document.querySelectorAll('[data-read-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.readMode;renderReader()}));
-$('manual-save').addEventListener('click',()=>{flushNoteDrafts(false);if(pendingMemo){if(!selected()||!els.memoInput.value.trim()){toast('解釈メモの範囲と本文を確認してください');return}saveMemo()}if(pendingPron){if(!selected()||!els.pronInput.value.trim()){toast('発音注釈の範囲と本文を確認してください');return}savePron()}const k=saveKeyInfo();if(!k)return;const saved=save();toast(saved?'この曲を保存しました':'保存できませんでした。JSONでバックアップしてください')});
+
+$('section-config-toggle').addEventListener('click',toggleSectionConfig);
+$('section-label-input').addEventListener('change',updateSectionCustomField);
+$('section-save').addEventListener('click',saveSection);
+$('section-cancel').addEventListener('click',resetSectionSelection);
+$('editor-section-nav').addEventListener('click',selectSectionTab);
+$('reader-section-nav').addEventListener('click',selectSectionTab);
+$('section-existing').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.sectionEdit){
+   const sec=(data.sections||[]).find(x=>x.id===b.dataset.sectionEdit);if(!sec)return;
+   sectionEditId=sec.id;sectionPickStart=sec.startLine;sectionPickEnd=sec.endLine;sectionPickPhase=2;
+   setSectionSelectValue('section-verse-input',sec.verse);setSectionSelectValue('section-label-input',sec.label);
+   $('section-save').textContent='変更を上書き保存';render();
+ }else if(b.dataset.sectionDelete){
+   const sec=(data.sections||[]).find(x=>x.id===b.dataset.sectionDelete);if(!sec)return;
+   change(()=>{data.sections=data.sections.filter(x=>x.id!==sec.id)});
+   if(sectionEditId===sec.id)resetSectionSelection();
+   toast('セクションを削除しました');
+ }
+});
+$('manual-save').addEventListener('click',()=>{
+ flushNoteDrafts(false);
+ if(pendingMemo){
+  if(!selected()||!els.memoInput.value.trim()){toast('解釈メモの範囲と本文を確認してください');return}
+  saveMemo();
+ }
+ if(pendingPron){
+  if(!selected()||!els.pronInput.value.trim()){toast('発音注釈の範囲と本文を確認してください');return}
+  savePron();
+ }
+ if(!saveKeyInfo())return;
+ if(!save()){
+  toast('保存できませんでした。JSONでバックアップしてください');
+  return;
+ }
+ const songId=currentSongId;
+ openReader(songId);
+ toast('保存しました');
+});
 els.memoInput.addEventListener('input',()=>{pendingMemo=true;$('quick-memo-input').value=els.memoInput.value;scheduleNoteDraft('memo',els.memoInput.value)});
 els.pronInput.addEventListener('input',()=>{pendingPron=true;$('quick-pron-input').value=els.pronInput.value;scheduleNoteDraft('pron',els.pronInput.value)});
 ['key-original','key-shift','key-comment'].forEach(id=>$(id).addEventListener('change',()=>{saveKeyInfo()}));
@@ -1369,6 +1769,9 @@ function renderLibrary(){
    return tokens.every(t=>target.includes(t));
  });
  $('library-count').textContent=query?filtered.length+' / '+songs.length+' 曲':songs.length+' 曲';
+ $('library-plan-usage').textContent='無料プラン '+songs.length+' / '+currentSongLimit()+'曲';
+ $('library-plan-usage').dataset.atLimit=String(!canAddSong());
+ $('library-plan-usage').title=!canAddSong()?'上限に達しています。既存の曲は引き続き編集できます。':'';
  $('song-search-clear').hidden=!input.value;
  $('song-search-status').textContent=query?filtered.length+' 件見つかりました':'';
  if(songs.length===0){
@@ -1436,7 +1839,7 @@ function submitQuickSong(e){
   if(!title){setQuickFeedback('曲名を入力してください（必須）。',true);setQuickClickStatus('入力エラー：曲名が未入力です');$('quick-song-title').setAttribute('aria-invalid','true');$('quick-song-title').focus();return}
   if(!shiftString||!Number.isInteger(shift)||shift<-12||shift>12){setQuickFeedback('キー変更量は−12〜+12の整数で指定してください。',true);setQuickClickStatus('入力エラー：キーの数値を確認してください');$('quick-key-shift').focus();return}
   const existing=songs.find(x=>x.id===$('quick-existing-song').value);
-  if(!existing&&songs.length>=100){setQuickFeedback('この試作品は100曲まで登録できます。',true);setQuickClickStatus('登録件数の上限です');return}
+  if(!existing&&!canAddSong()){setQuickFeedback(newSongLimitMessage(),true);setQuickClickStatus('登録件数の上限です');return}
   const keyInfo=normalizeKeyInfo({original:$('quick-key-original').value,shift,comment:$('quick-key-comment').value});
   if(existing){existing.keyInfo=keyInfo;existing.updatedAt=new Date().toISOString()}
   else songs.push({id:newId(),title,artist,updatedAt:new Date().toISOString(),keyInfo,content:{text:'',marks:[],memos:[],prons:[],breaths:[],separators:[]}});
@@ -1465,11 +1868,11 @@ function submitQuickSong(e){
 }
 function showView(view){flushNoteDrafts(false);closeQuickEdit();lastView=view;for(const name of ['library','quick','register','editor','reader'])$(name+'-view').hidden=name!==view;$('guide-again').hidden=view!=='editor';$('edit-open').hidden=view!=='editor';$('nav-library').disabled=view==='library';window.scrollTo(0,0)}
 function openForm(id=null,origin='library'){editingSongId=id;formOrigin=origin;const song=id?songs.find(s=>s.id===id):null;if(id&&!song)return;$('form-heading').textContent=song?'曲・歌詞を編集':'新しい曲を登録';$('form-save').textContent=song?'変更を保存 →':'登録して編集へ →';$('song-title').value=song?.title||'';$('song-artist').value=song?.artist||'';$('song-lyrics').value=song?.content.text||'';$('register-error').textContent='';$('register-feedback').textContent='曲名だけでも登録できます。';$('register-feedback').classList.remove('is-error');['song-title','song-lyrics'].forEach(i=>$(i).removeAttribute('aria-invalid'));updatePreview();showView('register')}
-function loadSong(id){flushNoteDrafts(false);const song=songs.find(s=>s.id===id);if(!song)return null;currentSongId=id;data=validData(song.content);history=[];start=null;end=null;selectionDone=false;editingMark=null;breathMode=false;mode='marks';flashRange=null;quickPronOpen=false;return song}
+function loadSong(id){flushNoteDrafts(false);const song=songs.find(s=>s.id===id);if(!song)return null;currentSongId=id;data=validData(song.content);history=[];start=null;end=null;selectionDone=false;editingMark=null;breathMode=false;mode='marks';flashRange=null;quickPronOpen=false;sectionEditActive=false;sectionPickStart=null;sectionPickEnd=null;sectionPickPhase=0;sectionEditId=null;sectionViewVerse='all';sectionViewLabel='all';$('editor-view').querySelector('.workspace').classList.remove('section-editing');$('section-config-body').hidden=true;$('section-config-toggle').textContent='＋ セクションを設定';$('section-config-toggle').setAttribute('aria-expanded','false');return song}
 function fillKeyEditor(song){const k=normalizeKeyInfo(song.keyInfo);$('key-original').value=k.original;$('key-shift').value=String(k.shift);$('key-comment').value=k.comment;setSaveState(storageOK?'自動保存済み':'この環境では自動保存できません',!storageOK)}
 function saveKeyInfo(){const song=songs.find(s=>s.id===currentSongId);if(!song)return false;const shiftNumber=Number($('key-shift').value);if(!Number.isFinite(shiftNumber)||shiftNumber<-12||shiftNumber>12||!Number.isInteger(shiftNumber)){toast('キー変更は −12〜+12 の整数で入力してください');return false}song.keyInfo=normalizeKeyInfo({original:$('key-original').value,shift:shiftNumber,comment:$('key-comment').value});song.updatedAt=new Date().toISOString();return persistSongs()}
 function openSong(id){const song=loadSong(id);if(!song)return;setSaveState(storageOK?'保存済みの曲を読み込みました':'ブラウザ内保存は利用できません。JSONバックアップを利用してください',!storageOK);$('editor-no-lyrics').hidden=!!song.content.text.trim();$('editor-song-title').textContent=song.title;$('editor-song-sub').textContent=song.artist||'アーティスト未設定';fillKeyEditor(song);els.memoInput.value='';$('quick-memo-input').value='';els.pronInput.value='';$('quick-pron-input').value='';showView('editor');render();}
-function renderReader(){const song=songs.find(s=>s.id===currentSongId);if(!song)return;$('reader-no-lyrics').hidden=!!song.content.text.trim();$('reader-song-title').textContent=song.title;$('reader-song-sub').textContent=song.artist||'アーティスト未設定';$('reader-key').textContent=keySummary(song);document.querySelectorAll('[data-read-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.readMode===mode)));renderLyrics($('reader-lyrics'),true)}
+function renderReader(){const song=songs.find(s=>s.id===currentSongId);if(!song)return;$('reader-no-lyrics').hidden=!!song.content.text.trim();$('reader-song-title').textContent=song.title;$('reader-song-sub').textContent=song.artist||'アーティスト未設定';$('reader-key').textContent=keySummary(song);document.querySelectorAll('[data-read-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.readMode===mode)));renderLyrics($('reader-lyrics'),true);renderSectionNavigation($('reader-section-nav'))}
 function openReader(id){const song=loadSong(id);if(!song)return;showView('reader');renderReader()}
 
 function formFeedback(message,isError=false,field=null){
@@ -1483,6 +1886,32 @@ function formFeedback(message,isError=false,field=null){
   $(field).focus({preventScroll:false});
  }
  if(isError)toast(message);
+}
+
+function remapSectionLines(oldContent,newText){
+ const before=oldContent.text?oldContent.text.split('\n'):[];
+ const after=newText?newText.split('\n'):[];
+ const src=normalizedSections(oldContent.sections,oldContent.text);
+ if(before.length===after.length)return {sections:normalizedSections(src,newText),removed:0};
+ const a=before.length,b=after.length;
+ if(a*b>2000000)return {sections:[],removed:src.length};
+ const dp=Array.from({length:a+1},()=>new Uint16Array(b+1));
+ for(let i=a-1;i>=0;i--)for(let j=b-1;j>=0;j--)
+  dp[i][j]=before[i]===after[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+ const map=new Array(a).fill(null);let i=0,j=0;
+ while(i<a&&j<b){
+  if(before[i]===after[j]){map[i]=j;i++;j++}
+  else if(dp[i+1][j]>=dp[i][j+1])i++;
+  else j++;
+ }
+ const moved=[];
+ for(const sec of src){
+  const first=map[sec.startLine],last=map[sec.endLine];
+  if(first===null||last===null||first>last)continue;
+  moved.push({...sec,startLine:first,endLine:last});
+ }
+ const clean=normalizedSections(moved,newText);
+ return {sections:clean,removed:src.length-clean.length};
 }
 function remapLyrics(oldContent,newText){
  const before=Array.from(oldContent.text),after=Array.from(newText);
@@ -1563,7 +1992,9 @@ function remapLyrics(oldContent,newText){
    seen.add(pos);next[key].push({...item,pos});kept++;
   }
  }
- return {content:next,kept,removed};
+ const sectionResult=remapSectionLines(oldContent,newText);
+ next.sections=sectionResult.sections;
+ return {content:next,kept,removed,removedSections:sectionResult.removed};
 }
 function submitSong(e){
  if(e)e.preventDefault();
@@ -1577,7 +2008,7 @@ function submitSong(e){
    if(!song){formFeedback('編集対象の曲が見つかりません。曲一覧から開き直してください。',true);return}
    const changed=text!==song.content.text;
    const remapped=changed?remapLyrics(song.content,text):null;
-   if(remapped&&remapped.removed&&!confirm('歌詞の変更に合わせて注釈の位置を調整します。\n\n維持できる注釈：'+remapped.kept+' 件\n削除が必要な注釈：'+remapped.removed+' 件\n\n削除される注釈があるため、必要なら先に曲一覧からJSONバックアップを保存してください。続行しますか？')){
+   if(remapped&&(remapped.removed||remapped.removedSections)&&!confirm('歌詞の変更に合わせて注釈とセクションの位置を調整します。\n\n維持できる注釈：'+remapped.kept+' 件\n削除が必要な注釈：'+remapped.removed+' 件\n削除が必要なセクション：'+remapped.removedSections+' 件\n\n必要なら先に曲一覧からJSONバックアップを保存してください。続行しますか？')){
     formFeedback('歌詞の変更はキャンセルしました。');return;
    }
    song.title=title;song.artist=artist;
@@ -1585,8 +2016,8 @@ function submitSong(e){
    song.updatedAt=new Date().toISOString();
    persistSongs();renderLibrary();openSong(song.id);toast(changed?'歌詞を更新し、注釈 '+remapped.kept+' 件を引き継ぎました':'曲を更新しました');return;
   }
-  if(songs.length>=100){formFeedback('この試作品は100曲まで登録できます。',true);return}
-  const song={id:newId(),title,artist,updatedAt:new Date().toISOString(),keyInfo:normalizeKeyInfo(null),content:{text,marks:[],memos:[],prons:[],breaths:[],separators:[]}};
+  if(!canAddSong()){formFeedback(newSongLimitMessage(),true);return}
+  const song={id:newId(),title,artist,updatedAt:new Date().toISOString(),keyInfo:normalizeKeyInfo(null),content:{text,marks:[],memos:[],prons:[],breaths:[],separators:[],sections:[]}};
   songs.push(song);persistSongs();renderLibrary();
   if(text.trim()){openSong(song.id);toast('曲を登録しました。歌唱記号を付けてみよう ✦')}
   else{showView('library');toast('曲名を保存しました。歌詞はあとから追加できます')}
@@ -1602,7 +2033,7 @@ $('nav-new').addEventListener('click',()=>openForm(null,lastView));$('nav-librar
 ['song-title','song-artist','song-lyrics'].forEach(id=>$(id).addEventListener('input',()=>{$('register-error').textContent='';$('register-feedback').textContent='曲名だけでも登録できます。';$('register-feedback').classList.remove('is-error');$(id).removeAttribute('aria-invalid');updatePreview()}));$('song-form').addEventListener('submit',submitSong);$('form-save').addEventListener('click',submitSong);
 $('form-demo').addEventListener('click',()=>{if(($('song-title').value||$('song-lyrics').value)&&!confirm('現在の入力内容をサンプルで置き換えますか？'))return;$('song-title').value='光の余韻';$('song-artist').value='UtaBloom デモ';$('song-lyrics').value=DEFAULT;updatePreview();toast('サンプルを入力しました')});
 $('song-list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.open)openReader(b.dataset.open);else if(b.dataset.edit)openSong(b.dataset.edit);else if(b.dataset.addLyrics)openForm(b.dataset.addLyrics,'library');else if(b.dataset.delete){const song=songs.find(x=>x.id===b.dataset.delete);if(!song)return;if(!confirm('「'+song.title+'」と注釈を削除しますか？ この操作は元に戻せません。'))return;songs=songs.filter(x=>x.id!==song.id);if(currentSongId===song.id)currentSongId=null;persistSongs();renderLibrary();toast('曲を削除しました')}});
-$('legacy-import').addEventListener('click',()=>{try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(!old||typeof old.text!=='string')throw Error();if(!confirm('v3.5のノートを新しい曲として複製します。旧データは変更しません。'))return;const song={id:newId(),title:'v3.5から取り込んだ曲',artist:'',updatedAt:new Date().toISOString(),content:validData(old)};songs.push(song);persistSongs();renderLibrary();openSong(song.id);toast('以前のノートを取り込みました')}catch(e){toast('旧データを読み込めませんでした')}});
+$('legacy-import').addEventListener('click',()=>{try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(!old||typeof old.text!=='string')throw Error();if(!canAddSong()){toast(newSongLimitMessage());return}if(!confirm('v3.5のノートを新しい曲として複製します。旧データは変更しません。'))return;const song={id:newId(),title:'v3.5から取り込んだ曲',artist:'',updatedAt:new Date().toISOString(),content:validData(old)};songs.push(song);persistSongs();renderLibrary();openSong(song.id);toast('以前のノートを取り込みました')}catch(e){toast('旧データを読み込めませんでした')}});
 
 $('library-backup').addEventListener('click',()=>{
  try{downloadSongbook();toast('曲一覧のバックアップJSONをダウンロードしました')}
@@ -1620,7 +2051,11 @@ $('library-restore-file').addEventListener('change',async e=>{
    imported=[{id:newId(),title:String(input.title||'取り込んだ曲').slice(0,100),artist:String(input.artist||'').slice(0,100),updatedAt:new Date().toISOString(),content:validData(input),keyInfo:normalizeKeyInfo(input.keyInfo)}];
   }else throw Error('invalid format');
   if(!imported.length)throw Error('no songs');
-  if(!confirm(imported.length+'曲を読み込みます。現在の曲一覧 '+songs.length+'曲は置き換えられます。続けますか？'))return;
+  const exceedsFreeLimit=imported.length>currentSongLimit();
+   const restoreNotice=imported.length+'曲を読み込みます。現在の曲一覧 '+songs.length+'曲は置き換えられます。'
+     +(exceedsFreeLimit?'\n\n無料プランの上限（'+currentSongLimit()+'曲）を超えるバックアップです。復元した曲は削除しませんが、新しい曲は登録できなくなります。':'')
+     +'\n\n続けますか？';
+   if(!confirm(restoreNotice))return;
   songs=imported;const persisted=persistSongs();renderLibrary();refreshStorageStatus();
   toast(persisted?'曲一覧を復元しました':'一時的に復元しました。JSONを保管してください');
  }catch(err){console.error(err);alert('読み込みに失敗しました。UtaBloomまたは旧UtaNoteのバックアップJSONを選択してください。')}
