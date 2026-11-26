@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.21</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.22</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -57,9 +57,14 @@
 .breath-editor{margin-top:15px;border-top:1px dashed #eae5f4;padding-top:14px}
 .breath-editor .panel-head{margin-bottom:7px}
 .mark-help{margin:0 0 12px}
-.voice-group-heading{display:flex;align-items:baseline;gap:9px;margin:16px 0 8px;color:#5e4b83;font-size:13px;font-weight:850}
-.voice-group-heading small{font-size:11px;font-weight:600;color:#827b97}
+.notation-groups{display:grid;gap:15px}
+.notation-group{min-width:0}
+.notation-group-heading,.voice-group-heading{display:flex;align-items:baseline;gap:9px;margin:0 0 8px;color:#5e4b83;font-size:13px;font-weight:850}
+.voice-group-heading{margin:16px 0 8px}
+.notation-group-heading small,.voice-group-heading small{font-size:11px;font-weight:600;color:#827b97}
+.notation-group .symbol-grid,.voice-color-grid{grid-template-columns:repeat(4,minmax(0,110px))}
 .voice-color-grid .symbol:nth-child(n){background:var(--tone-bg,#f7f4ff);border-color:var(--tone-line,#e9ddf8);color:var(--tone,#6552ba)}
+@media(max-width:580px){.notation-group .symbol-grid,.voice-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .quick-group-label{align-self:center;flex:0 0 auto;font-size:10px;font-weight:800;color:#77658f;border-left:1px solid #e4dcf1;padding:4px 0 4px 9px;white-space:nowrap}
 .breath-help{margin:0 0 10px}
 .breath-editor .separator-toggle{margin-top:9px}
@@ -417,7 +422,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.21: section navigation */
+/* v3.14.22: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -606,11 +611,24 @@
 
   <section class="panel" id="editor-panel">
     <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3></div>
-      <p class="helptext mark-help">文字ごとに設定できます。</p>
-      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
-      <div class="voice-group-heading">声色 <small>歌詞の文字色で表示します</small></div>
+      <p class="helptext mark-help">歌い方に合わせてグループから記号を選べます。文字・フレーズ単位で設定できます。</p>
+      <div class="notation-groups" id="symbol-grid" aria-label="歌唱記号の分類">
+        <section class="notation-group" role="group" aria-label="抑揚">
+          <h4 class="notation-group-heading">抑揚</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button></div>
+        </section>
+        <section class="notation-group" role="group" aria-label="音の持続・変化">
+          <h4 class="notation-group-heading">音の持続・変化</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button></div>
+        </section>
+        <section class="notation-group" role="group" aria-label="強弱">
+          <h4 class="notation-group-heading">強弱</h4>
+          <div class="symbol-grid"><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
+        </section>
+      </div>
+      <h4 class="voice-group-heading">声色 <small>歌詞の文字色で表示します</small></h4>
       <div class="symbol-grid voice-color-grid" id="voice-grid" role="group" aria-label="声色"><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="裏">裏<small>裏声</small></button><button type="button" class="symbol" data-symbol="エ">エ<small>エッジ</small></button></div>
-      <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎ）とフレージング（区切り）</h3></div>
+      <div class="breath-editor" role="group" aria-label="ブレス・フレージング"><div class="panel-head"><h4 class="notation-group-heading">ブレス・フレージング</h4></div>
         <p class="helptext breath-help">行頭・行末・文字間をタップして、追加・解除できます。</p>
         <button type="button" id="breath-toggle" class="breath-toggle" aria-pressed="false">＋ ブレスを挿入</button>
         <button type="button" id="separator-toggle" class="separator-toggle" aria-pressed="false">＋ 区切りを挿入</button>
