@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.19</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.20</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -413,7 +413,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.19: section navigation */
+/* v3.14.20: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -442,7 +442,9 @@
 .section-config-body p{margin:0 0 10px;font-size:12px;color:#726586}
 .section-config-inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .section-config-inputs label{display:flex;flex-direction:column;gap:4px;font-size:11px;font-weight:750;color:#665a82}
-.section-config-inputs select{width:100%;min-width:0;background:#fff;border:1px solid #dcd3ed;border-radius:9px;padding:9px;font-size:13px;min-height:42px;color:#413554}
+.section-config-inputs select,.section-config-inputs input{width:100%;min-width:0;background:#fff;border:1px solid #dcd3ed;border-radius:9px;padding:9px;font-size:13px;min-height:42px;color:#413554}
+.section-custom-wrapper{grid-column:1/-1}
+.section-custom-wrapper[hidden]{display:none!important}
 .section-range-status{margin:12px 0 10px;color:#66548d;font-size:12px;font-weight:800}
 .section-config-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
 .section-existing{display:flex;flex-direction:column;gap:8px;margin-top:12px}
@@ -582,8 +584,9 @@
        <div class="section-config-body" id="section-config-body" hidden>
          <p>上の「番・構成」タブで表示を切り替えながら、歌詞の行番号をタップして範囲を選択します。登録済みのセクション名から直接編集でき、既存範囲への上書きも可能です。</p>
          <div class="section-config-inputs">
-           <label for="section-verse-input">何番<select id="section-verse-input"><option value="1番">1番</option><option value="2番">2番</option><option value="3番">3番</option><option value="4番">4番</option><option value="5番">5番</option><option value="6番">6番</option><option value="7番">7番</option><option value="8番">8番</option><option value="9番">9番</option><option value="10番">10番</option></select></label>
-         <label for="section-label-input">セクション<select id="section-label-input"><option value="Aメロ">Aメロ</option><option value="Bメロ">Bメロ</option><option value="Cメロ">Cメロ</option><option value="サビ">サビ</option></select></label>
+           <label for="section-verse-input">何番<select id="section-verse-input"><option value="1番">1番</option><option value="2番">2番</option><option value="3番">3番</option><option value="4番">4番</option><option value="5番">5番</option><option value="6番">6番</option><option value="7番">7番</option><option value="8番">8番</option><option value="9番">9番</option><option value="10番">10番</option><option value="番なし">番なし</option></select></label>
+         <label for="section-label-input">セクション<select id="section-label-input"><option value="Aメロ">Aメロ</option><option value="Bメロ">Bメロ</option><option value="Cメロ">Cメロ</option><option value="サビ">サビ</option><option value="落ちサビ">落ちサビ</option><option value="ラスサビ">ラスサビ</option><option value="__custom_section_label__">その他（自由入力）</option></select></label>
+            <label for="section-custom-label" class="section-custom-wrapper" id="section-custom-wrapper" hidden>セクション名（30文字以内）<input type="text" id="section-custom-label" maxlength="30" placeholder="例：ブリッジ、語り、Dメロ" autocomplete="off"></label>
          </div>
          <div id="section-range-status" class="section-range-status" role="status">まだ行が選択されていません。</div>
          <div class="section-config-actions"><button type="button" id="section-save" class="reg-save">セクションを保存</button><button type="button" id="section-cancel" class="secondary-action">選択を解除</button></div>
@@ -830,11 +833,27 @@ function chooseSectionLine(i){
  else{sectionPickEnd=i;sectionPickPhase=2}
  render();
 }
-const SECTION_VERSES=Array.from({length:10},(_,i)=>(i+1)+'番');
-const SECTION_LABELS=['Aメロ','Bメロ','Cメロ','サビ'];
+const SECTION_VERSES=[...Array.from({length:10},(_,i)=>(i+1)+'番'),'番なし'];
+const SECTION_LABELS=['Aメロ','Bメロ','Cメロ','サビ','落ちサビ','ラスサビ'];
+const SECTION_CUSTOM_VALUE='__custom_section_label__';
+function updateSectionCustomField(){
+ const custom=$('section-label-input').value===SECTION_CUSTOM_VALUE;
+ $('section-custom-wrapper').hidden=!custom;
+ $('section-custom-label').disabled=!custom;
+}
 function setSectionSelectValue(id,value){
  const select=$(id);
  select.querySelectorAll('option[data-legacy]').forEach(option=>option.remove());
+ if(id==='section-label-input'){
+   if(!SECTION_LABELS.includes(value)){
+     select.value=SECTION_CUSTOM_VALUE;
+     $('section-custom-label').value=String(value||'').slice(0,30);
+   }else{
+     select.value=value;
+     $('section-custom-label').value='';
+   }
+   updateSectionCustomField();return;
+ }
  if(!Array.from(select.options).some(option=>option.value===value)){
    const legacy=document.createElement('option');legacy.value=value;
    legacy.textContent=value+'（以前の設定）';legacy.dataset.legacy='true';select.appendChild(legacy);
@@ -874,12 +893,17 @@ function replaceSectionRange(sections,range,verse,label,editingId){
 }
 function saveSection(){
  const range=sectionPickRange(),verse=$('section-verse-input').value.trim(),
-       label=$('section-label-input').value.trim();
+       labelChoice=$('section-label-input').value,
+       label=(labelChoice===SECTION_CUSTOM_VALUE?$('section-custom-label').value:labelChoice).trim();
  if(!range){toast('最初に歌詞の行番号をタップしてください');return}
- if(!verse||!label){toast('何番とセクションを選択してください');return}
+ if(!verse){toast('何番を選んでください');return}
+ if(!label){toast('セクション名を入力してください');if(labelChoice===SECTION_CUSTOM_VALUE)$('section-custom-label').focus();return}
+ if(label.length>30){toast('セクション名は30文字以内で入力してください');return}
  const editing=(data.sections||[]).find(x=>x.id===sectionEditId);
- if(!SECTION_VERSES.includes(verse)&&(!editing||editing.verse!==verse)){toast('何番は1番〜10番から選んでください');return}
- if(!SECTION_LABELS.includes(label)&&(!editing||editing.label!==label)){toast('セクションはAメロ・Bメロ・Cメロ・サビから選んでください');return}
+ if(!SECTION_VERSES.includes(verse)&&(!editing||editing.verse!==verse)){toast('何番は1番〜10番・番なしから選んでください');return}
+ if(labelChoice!==SECTION_CUSTOM_VALUE&&!SECTION_LABELS.includes(label)&&(!editing||editing.label!==label)){
+   toast('セクション名を選び直してください');return;
+ }
  const overlaps=(data.sections||[]).filter(x=>x.id!==sectionEditId&&x.startLine<=range.endLine&&range.startLine<=x.endLine);
  if(overlaps.length){
   const description=overlaps.map(x=>x.verse+' / '+x.label+'（'+(x.startLine+1)+'〜'+(x.endLine+1)+'行目）').join('\n');
@@ -1613,6 +1637,7 @@ $('editor-add-lyrics').addEventListener('click',()=>openForm(currentSongId,'edit
 document.querySelectorAll('[data-read-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.readMode;renderReader()}));
 
 $('section-config-toggle').addEventListener('click',toggleSectionConfig);
+$('section-label-input').addEventListener('change',updateSectionCustomField);
 $('section-save').addEventListener('click',saveSection);
 $('section-cancel').addEventListener('click',resetSectionSelection);
 $('editor-section-nav').addEventListener('click',selectSectionTab);
