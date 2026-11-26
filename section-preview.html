@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.24</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.25</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -186,16 +186,17 @@
 .quick-palette{position:sticky;top:0;z-index:30;background:#fffefefa;backdrop-filter:blur(10px);border:1px solid #e4ddf4;border-radius:15px;margin:10px 0;padding:8px 11px;box-shadow:0 8px 18px #40357413;display:flex;gap:9px;align-items:center;justify-content:space-between}
 .quick-palette[hidden]{display:none!important}
 .quick-context{font-size:11px;font-weight:800;color:#65578f;min-width:0;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.quick-buttons{display:flex;gap:8px;overflow-x:auto;flex:1;min-width:0;justify-content:flex-start;padding:2px 0;scrollbar-width:thin;overscroll-behavior-x:contain}
-.quick-symbol-group{display:flex;gap:5px;align-items:center;flex:0 0 auto;padding-right:8px;border-right:1px solid #e9e2f2}
-.quick-symbol-group:last-child{border-right:0;padding-right:2px}
-.quick-symbol-group-name{font-size:10px;line-height:1.25;font-weight:800;color:#77658f;white-space:nowrap}
+.quick-buttons{display:flex;flex-wrap:wrap;gap:9px 12px;overflow:visible;flex:1 1 100%;min-width:0;justify-content:flex-start;padding:2px 0}
+.quick-symbol-group{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:3px;flex:0 0 auto;min-width:0;padding:0 3px 0 0}
+.quick-symbol-group-name{display:block;font-size:10px;line-height:1.2;font-weight:850;color:#685487;white-space:nowrap}
 .quick-symbol-group-marks{display:flex;align-items:center;gap:4px}
+.quick-symbol-group-marks button{min-width:34px;height:34px}
+@media(max-width:600px){.quick-buttons{gap:9px 11px}.quick-symbol-group-name{font-size:10px}}
 .quick-buttons button{display:inline-grid;place-items:center;flex:0 0 auto;min-width:37px;height:35px;border-radius:9px;background:var(--tone-bg,#f4f1ff);border:1px solid var(--tone-line,#e3d8fb);color:var(--tone,#6652ba);font-size:17px;font-weight:850;padding:4px 7px}
 .quick-buttons .quick-insert{background:#eaf7f5;color:#247e77;border-color:#c4e8e2}
 .quick-buttons .quick-insert#quick-separator{background:#fff3e5;color:#9e671e;border-color:#efd8bb}
 .quick-buttons button[aria-pressed=true]{outline:3px solid #bca9ee;outline-offset:0}
-/* Each group is labelled in place. Horizontal scrolling keeps all marks accessible. */
+/* Inline labels remain visible; groups wrap rather than hiding offscreen. */
 /* v3.13.5: insertion modes are exclusive with range annotations. */
 #quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,#voice-grid button[data-symbol]:disabled,
 #quick-pron-toggle:disabled,#pron-save:disabled,#quick-pron-save:disabled{
@@ -217,7 +218,7 @@
 .inline-annotation{z-index:2}
 .inline-annotation .annotation-glyphs{flex-shrink:0;min-height:21px;flex-wrap:nowrap}
 .inline-annotation .pron-reading{flex-shrink:0}
-@media(max-width:600px){.quick-palette{margin:7px 0;padding:7px;gap:5px;flex-wrap:wrap}.quick-context{max-width:none;width:100%}.quick-buttons{justify-content:flex-start}.quick-buttons button{min-width:35px;height:34px}}
+@media(max-width:600px){.quick-palette{margin:7px 0;padding:7px;gap:5px;flex-wrap:wrap}.quick-context{max-width:none;width:100%}.quick-buttons{justify-content:flex-start}.quick-buttons button{min-width:34px;height:34px}}
 
 /* v3.13.5: memo stays in a sticky input panel; insertion marks are hidden in memo mode. */
 .quick-buttons[hidden],.quick-pron-toggle[hidden],.quick-memo-form[hidden]{display:none!important}
@@ -427,7 +428,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.24: section navigation */
+/* v3.14.25: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
