@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.15</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.16</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -413,7 +413,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.15: section navigation */
+/* v3.14.16: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -449,7 +449,8 @@
 .section-existing-item button{border:1px solid #ded5f1;background:#fff;color:#6652a5;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:750}
 .section-line-pick{border:1px solid #d9d0ec;background:#fff;color:#7c70a0;border-radius:8px;padding:4px 9px;margin:2px 0 5px;font-size:11px;font-weight:800;min-height:30px}
 .section-line-pick[aria-pressed="true"]{color:#fff;background:#7058d7;border-color:#7058d7}
-.section-current-badge{display:inline-flex;align-items:center;max-width:100%;margin:3px 8px 4px 0;padding:4px 9px;border:1px solid #d9cdf8;border-radius:8px;background:#f1edff;color:#5e49ad;font-weight:800;font-size:11px;line-height:1.4;vertical-align:middle}
+.section-current-badge{display:inline-flex;align-items:center;max-width:100%;margin:3px 8px 4px 0;padding:4px 9px;border:1px solid #d9cdf8;border-radius:8px;background:#f1edff;color:#5e49ad;font-weight:800;font-size:11px;line-height:1.4;vertical-align:middle;cursor:pointer}
+.section-current-badge:hover,.section-current-badge[data-editing="true"]{background:#e6dcff;border-color:#aa95e5}
 .section-row-title{font-size:12px;font-weight:850;color:#6952aa;background:#f6f2ff;border-left:3px solid #947bdd;padding:7px 12px;margin:13px 0 3px;border-radius:2px 8px 8px 2px}
 .lyric-row[hidden]{display:none!important}
 @media(max-width:580px){.section-navigation,.section-setup{padding-left:12px;padding-right:12px}.section-config-inputs{grid-template-columns:1fr}.section-tab{padding:7px 10px}}
@@ -578,7 +579,7 @@
      <div class="section-setup">
        <button type="button" id="section-config-toggle" class="section-setup-toggle" aria-expanded="false">＋ セクションを設定</button>
        <div class="section-config-body" id="section-config-body" hidden>
-         <p>歌詞の行番号をタップして開始行・終了行を選択。1行だけなら1回タップで設定できます。</p>
+         <p>歌詞の行番号をタップして範囲を選択します。登録済みのセクション名から直接編集でき、既存範囲への上書きも可能です。</p>
          <div class="section-config-inputs">
            <label for="section-verse-input">何番<select id="section-verse-input"><option value="1番">1番</option><option value="2番">2番</option><option value="3番">3番</option><option value="4番">4番</option><option value="5番">5番</option><option value="6番">6番</option><option value="7番">7番</option><option value="8番">8番</option><option value="9番">9番</option><option value="10番">10番</option></select></label>
          <label for="section-label-input">セクション<select id="section-label-input"><option value="Aメロ">Aメロ</option><option value="Bメロ">Bメロ</option><option value="Cメロ">Cメロ</option><option value="サビ">サビ</option></select></label>
@@ -855,6 +856,21 @@ function toggleSectionConfig(){
  $('section-config-toggle').textContent=sectionEditActive?'× セクション設定を閉じる':'＋ セクションを設定';
  render();
 }
+// Overwrite selected lines; keep other sections' unselected lines.
+function replaceSectionRange(sections,range,verse,label,editingId){
+ const editing=sections.find(x=>x.id===editingId);
+ const exact=!editing&&sections.find(x=>x.startLine===range.startLine&&x.endLine===range.endLine);
+ const id=editing?.id||exact?.id||newId();
+ const output=[];
+ for(const sec of sections){
+  if(sec.id===id||sec.id===editingId)continue;
+  if(sec.endLine<range.startLine||sec.startLine>range.endLine){output.push(sec);continue}
+  if(sec.startLine<range.startLine)output.push({...sec,endLine:range.startLine-1});
+  if(sec.endLine>range.endLine)output.push({...sec,id:sec.startLine<range.startLine?newId():sec.id,startLine:range.endLine+1});
+ }
+ output.push({id,verse,label,...range});
+ return output.sort((a,b)=>a.startLine-b.startLine);
+}
 function saveSection(){
  const range=sectionPickRange(),verse=$('section-verse-input').value.trim(),
        label=$('section-label-input').value.trim();
@@ -863,15 +879,16 @@ function saveSection(){
  const editing=(data.sections||[]).find(x=>x.id===sectionEditId);
  if(!SECTION_VERSES.includes(verse)&&(!editing||editing.verse!==verse)){toast('何番は1番〜10番から選んでください');return}
  if(!SECTION_LABELS.includes(label)&&(!editing||editing.label!==label)){toast('セクションはAメロ・Bメロ・Cメロ・サビから選んでください');return}
- const overlap=(data.sections||[]).some(x=>x.id!==sectionEditId&&x.startLine<=range.endLine&&range.startLine<=x.endLine);
- if(overlap){toast('既存のセクションと行が重なっています');return}
- const id=sectionEditId||newId();
- change(()=>{
-   data.sections=(data.sections||[]).filter(x=>x.id!==id);
-   data.sections.push({id,verse,label,...range});
-   data.sections.sort((a,b)=>a.startLine-b.startLine);
- });
- resetSectionSelection();toast('「'+verse+' / '+label+'」を保存しました');
+ const overlaps=(data.sections||[]).filter(x=>x.id!==sectionEditId&&x.startLine<=range.endLine&&range.startLine<=x.endLine);
+ if(overlaps.length){
+  const description=overlaps.map(x=>x.verse+' / '+x.label+'（'+(x.startLine+1)+'〜'+(x.endLine+1)+'行目）').join('\n');
+  if(!confirm('既存のセクションに重なっています。\n\n'+description+'\n\n'
+    +(range.startLine+1)+'〜'+(range.endLine+1)+'行目を「'+verse+' / '+label+'」で上書きしますか？'
+    +'\n（選択範囲外の設定は残ります。元に戻すこともできます。）'))return;
+ }
+ const isOverwrite=!!editing||overlaps.length>0;
+ change(()=>{data.sections=replaceSectionRange(data.sections||[],range,verse,label,sectionEditId)});
+ resetSectionSelection();toast('「'+verse+' / '+label+'」を'+(isOverwrite?'上書き':'登録')+'しました');
 }
 function renderSectionSetup(){
  if(!sectionEditActive)return;
@@ -955,9 +972,11 @@ function renderLyrics(target=els.lyrics,readOnly=false){
     const lineIndex=rows.length;
     const existing=(data.sections||[]).find(sec=>lineIndex>=sec.startLine&&lineIndex<=sec.endLine);
     if(existing){
-      const badge=document.createElement('span');badge.className='section-current-badge';
-      badge.textContent=existing.verse+' / '+existing.label;
-      badge.title='現在の設定：'+existing.verse+' / '+existing.label;
+      const badge=document.createElement('button');badge.type='button';badge.className='section-current-badge';
+      badge.dataset.sectionOpen=existing.id;badge.dataset.editing=String(existing.id===sectionEditId);
+      badge.textContent=existing.verse+' / '+existing.label+' ✎';
+      badge.title='このセクションを上書き編集';
+      badge.setAttribute('aria-label',existing.verse+' / '+existing.label+'を編集');
       line.appendChild(badge);
     }
     const picker=document.createElement('button');picker.type='button';picker.className='section-line-pick';
@@ -1539,6 +1558,17 @@ function toggleInsertPoint(type,pos){
  }
 }
 els.lyrics.addEventListener('click',e=>{
+ const sectionBadge=e.target.closest('[data-section-open]');
+ if(sectionBadge){
+  const sec=(data.sections||[]).find(x=>x.id===sectionBadge.dataset.sectionOpen);
+  if(sec&&sectionEditActive){
+   sectionEditId=sec.id;sectionPickStart=sec.startLine;sectionPickEnd=sec.endLine;sectionPickPhase=2;
+   setSectionSelectValue('section-verse-input',sec.verse);
+   setSectionSelectValue('section-label-input',sec.label);
+   $('section-save').textContent='変更を上書き保存';render();
+  }
+  return;
+ }
  const picker=e.target.closest('[data-section-line]');if(picker){chooseSectionLine(Number(picker.dataset.sectionLine));return}
  if(sectionEditActive)return;
  const slash=e.target.closest('[data-separator]');
@@ -1586,7 +1616,7 @@ $('section-existing').addEventListener('click',e=>{
    const sec=(data.sections||[]).find(x=>x.id===b.dataset.sectionEdit);if(!sec)return;
    sectionEditId=sec.id;sectionPickStart=sec.startLine;sectionPickEnd=sec.endLine;sectionPickPhase=2;
    setSectionSelectValue('section-verse-input',sec.verse);setSectionSelectValue('section-label-input',sec.label);
-   $('section-save').textContent='セクションを更新';render();
+   $('section-save').textContent='変更を上書き保存';render();
  }else if(b.dataset.sectionDelete){
    const sec=(data.sections||[]).find(x=>x.id===b.dataset.sectionDelete);if(!sec)return;
    change(()=>{data.sections=data.sections.filter(x=>x.id!==sec.id)});
