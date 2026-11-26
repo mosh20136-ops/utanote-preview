@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.20</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.21</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -57,6 +57,10 @@
 .breath-editor{margin-top:15px;border-top:1px dashed #eae5f4;padding-top:14px}
 .breath-editor .panel-head{margin-bottom:7px}
 .mark-help{margin:0 0 12px}
+.voice-group-heading{display:flex;align-items:baseline;gap:9px;margin:16px 0 8px;color:#5e4b83;font-size:13px;font-weight:850}
+.voice-group-heading small{font-size:11px;font-weight:600;color:#827b97}
+.voice-color-grid .symbol:nth-child(n){background:var(--tone-bg,#f7f4ff);border-color:var(--tone-line,#e9ddf8);color:var(--tone,#6552ba)}
+.quick-group-label{align-self:center;flex:0 0 auto;font-size:10px;font-weight:800;color:#77658f;border-left:1px solid #e4dcf1;padding:4px 0 4px 9px;white-space:nowrap}
 .breath-help{margin:0 0 10px}
 .breath-editor .separator-toggle{margin-top:9px}
 .breath-toggle{border:1px solid #abd9d3;border-radius:11px;background:#eaf8f6;color:#126e6a;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer}
@@ -183,11 +187,11 @@
 .quick-buttons .quick-insert#quick-separator{background:#fff3e5;color:#9e671e;border-color:#efd8bb}
 .quick-buttons button[aria-pressed=true]{outline:3px solid #bca9ee;outline-offset:0}
 /* v3.13.5: insertion modes are exclusive with range annotations. */
-#quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,
+#quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,#voice-grid button[data-symbol]:disabled,
 #quick-pron-toggle:disabled,#pron-save:disabled,#quick-pron-save:disabled{
  opacity:.35!important;filter:grayscale(.7);cursor:not-allowed!important;box-shadow:none!important;
 }
-#quick-buttons button[data-symbol]:disabled:focus-visible,#symbol-grid button[data-symbol]:disabled:focus-visible{
+#quick-buttons button[data-symbol]:disabled:focus-visible,#symbol-grid button[data-symbol]:disabled:focus-visible,#voice-grid button[data-symbol]:disabled:focus-visible{
  outline:2px solid #aaa;outline-offset:1px;
 }
 
@@ -413,7 +417,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.20: section navigation */
+/* v3.14.21: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -555,10 +559,12 @@
     <span class="quick-context" id="quick-context">文字を2回タップして選択</span>
     <div class="quick-buttons" id="quick-buttons">
       <button type="button" data-symbol="↗" title="上げる">↗</button><button type="button" data-symbol="↘" title="下げる">↘</button>
-      <button type="button" data-symbol="息" title="ウィスパー">息</button><button type="button" data-symbol="強" title="強調">強</button>
       <button type="button" data-symbol="〜" title="ロングトーン">〜</button><button type="button" data-symbol="〰" title="ビブラート">〰</button><button type="button" data-symbol="・" title="アクセント">・</button>
       <button type="button" data-symbol="＜" title="だんだん強く" aria-label="クレッシェンド・だんだん強く">＜</button>
       <button type="button" data-symbol="＞" title="だんだん弱く" aria-label="デクレッシェンド・だんだん弱く">＞</button>
+      <span class="quick-group-label" aria-hidden="true">声色</span>
+      <button type="button" data-symbol="息" title="ウィスパー">息</button><button type="button" data-symbol="強" title="強調">強</button>
+      <button type="button" data-symbol="裏" title="裏声">裏</button><button type="button" data-symbol="エ" title="エッジ">エ</button>
       <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
       <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
     </div>
@@ -601,7 +607,9 @@
   <section class="panel" id="editor-panel">
     <div id="marks-panel"><div class="panel-head"><h3 id="palette-title">✦ 記号を付ける</h3></div>
       <p class="helptext mark-help">文字ごとに設定できます。</p>
-      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
+      <div class="symbol-grid" id="symbol-grid"><button type="button" class="symbol" data-symbol="↗">↗<small>上げる</small></button><button type="button" class="symbol" data-symbol="↘">↘<small>下げる</small></button><button type="button" class="symbol" data-symbol="〜">〜<small>ロングトーン</small></button><button type="button" class="symbol" data-symbol="〰">〰<small>ビブラート</small></button><button type="button" class="symbol" data-symbol="・">・<small>アクセント</small></button><button type="button" class="symbol" data-symbol="＜">＜<small>だんだん強く</small></button><button type="button" class="symbol" data-symbol="＞">＞<small>だんだん弱く</small></button></div>
+      <div class="voice-group-heading">声色 <small>歌詞の文字色で表示します</small></div>
+      <div class="symbol-grid voice-color-grid" id="voice-grid" role="group" aria-label="声色"><button type="button" class="symbol" data-symbol="息">息<small>ウィスパー</small></button><button type="button" class="symbol" data-symbol="強">強<small>強調</small></button><button type="button" class="symbol" data-symbol="裏">裏<small>裏声</small></button><button type="button" class="symbol" data-symbol="エ">エ<small>エッジ</small></button></div>
       <div class="breath-editor"><div class="panel-head"><h3>∨ ブレス（息継ぎ）とフレージング（区切り）</h3></div>
         <p class="helptext breath-help">行頭・行末・文字間をタップして、追加・解除できます。</p>
         <button type="button" id="breath-toggle" class="breath-toggle" aria-pressed="false">＋ ブレスを挿入</button>
@@ -654,12 +662,17 @@ const MARK_STYLE={
  '↘':{color:'#bd446e',bg:'#fff0f5',border:'#f2d2df'},
  '息':{color:'#177b76',bg:'#e9f8f5',border:'#c9eae4'},
  '強':{color:'#a15e17',bg:'#fff3e5',border:'#f2dfc0'},
+ '裏':{color:'#654ab5',bg:'#f1edff',border:'#dcd3f6'},
+ 'エ':{color:'#b54362',bg:'#fff0f4',border:'#f2d1dd'},
  '〜':{color:'#2e68b2',bg:'#edf4ff',border:'#d0e1fb'},
  '〰':{color:'#7d4caa',bg:'#f5efff',border:'#e2d1f6'},
  '・':{color:'#ad4f92',bg:'#ffeff9',border:'#f2d1e8'},
  '＜':{color:'#277f65',bg:'#eaf8f0',border:'#cde9dd'},
  '＞':{color:'#b45c3a',bg:'#fff2ea',border:'#f2dbcc'}
 };
+const VOICE_TONES=['息','強','裏','エ']; // Text-color marks, not overhead glyphs.
+const VOICE_TONE_NAMES={'息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ'};
+const VOICE_TONE_PRIORITY=['エ','裏','強','息']; // Do not erase overlapping annotations.
 function applyTone(el,symbol){const t=MARK_STYLE[symbol];if(!t)return;el.dataset.tone=symbol;el.style.setProperty('--tone',t.color);el.style.setProperty('--tone-bg',t.bg);el.style.setProperty('--tone-line',t.border)}
 document.querySelectorAll('[data-symbol]').forEach(b=>applyTone(b,b.dataset.symbol));
 
@@ -690,7 +703,7 @@ function normalizedSections(items,text){
    });
  return out;
 }
-function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','〜','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
+function validData(raw){const text=String(typeof raw.text==='string'?raw.text:DEFAULT).slice(0,6000);const max=Array.from(text).length;const goodRange=o=>o&&Number.isInteger(o.start)&&Number.isInteger(o.end)&&o.start>=0&&o.end<max&&o.start<=o.end;const goodPoints=xs=>(Array.isArray(xs)?xs:[]).filter(x=>x&&Number.isInteger(x.pos)&&x.pos>=0&&x.pos<=max).filter((x,i,arr)=>arr.findIndex(y=>y.pos===x.pos)===i).map(x=>({id:String(x.id||newId()),pos:x.pos}));return {text,marks:(Array.isArray(raw.marks)?raw.marks:[]).filter(x=>goodRange(x)&&['↗','↘','息','強','裏','エ','〜','〰','・','＜','＞'].includes(x.symbol)&& (x.symbol!=='・'||x.start===x.end)).map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,symbol:x.symbol})),memos:(Array.isArray(raw.memos)?raw.memos:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,500)})),prons:(Array.isArray(raw.prons)?raw.prons:[]).filter(x=>goodRange(x)&&typeof x.text==='string').map(x=>({id:String(x.id||newId()),start:x.start,end:x.end,text:x.text.slice(0,80)})),breaths:goodPoints(raw.breaths),separators:goodPoints(raw.separators),sections:normalizedSections(raw.sections,text)}}
 function refreshStorageStatus(){
  const library=$('library-storage-note');
  const quick=$('quick-storage-status');
@@ -1023,14 +1036,13 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Earlier versions painted both on the same bottom line, hiding the reading's teal color.
   if(mode==='marks'){
    const symbols=markAt.get(i)||[];
-   const underlineSymbols=[...new Set(symbols.filter(symbol=>symbol!=='息'&&symbol!=='強'))];
+   const underlineSymbols=[...new Set(symbols.filter(symbol=>!VOICE_TONES.includes(symbol)))];
    const hasMark=underlineSymbols.length>0,hasPron=pronAt.has(i);
-   // Emphasis and whisper are text colors, never badges or underlines.
-   // If both apply, emphasis has a fixed visual priority; both remain editable.
-   const textTone=symbols.includes('強')?'強':symbols.includes('息')?'息':null;
+   // Voice tone displays as text color. A priority resolves overlapping ranges without deleting marks.
+   const textTone=VOICE_TONE_PRIORITY.find(symbol=>symbols.includes(symbol));
    if(textTone){
-     span.style.color=MARK_STYLE[textTone].color;
-     span.title=[symbols.includes('強')?'強調':null,symbols.includes('息')?'ウィスパー':null].filter(Boolean).join('・')+'（文字色）';
+    span.style.color=MARK_STYLE[textTone].color;
+    span.title=VOICE_TONES.filter(symbol=>symbols.includes(symbol)).map(symbol=>VOICE_TONE_NAMES[symbol]).join('・')+'（声色・文字色）';
    }
    if(hasMark)span.classList.add('marked');
    if(hasPron)span.classList.add('pronounced');
@@ -1089,7 +1101,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Separate annotation types before layout; do not merge pronunciation with singing marks.
   const current=[];
   if(mode==='marks'){
-    displayMarks(data.marks.filter(m=>m.symbol!=='息'&&m.symbol!=='強')).filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
+    displayMarks(data.marks.filter(m=>!VOICE_TONES.includes(m.symbol))).filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
       current.push({kind:m.symbol==='・'?'accent':'mark',start:m.start,end:m.end,marks:[m],prons:[],memos:[]});
     });
     data.prons.filter(m=>m.start<=row.end&&m.end>=row.start).forEach(m=>{
@@ -1146,7 +1158,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
   // Distant annotations reuse the lowest lane instead of floating above empty rows.
   located.forEach((items,v)=>{
     const rank={pron:0,accent:1,mark:2,memo:0};
-    const symbolOrder=['↗','↘','息','強','〜','〰','＜','＞'];
+    const symbolOrder=['↗','↘','息','強','裏','エ','〜','〰','＜','＞'];
     const placed=[];
     const intersects=(a,b)=>a.start<=b.end&&b.start<=a.end;
     const ordered=[...items].sort((a,b)=>rank[a.kind]-rank[b.kind]
@@ -1230,7 +1242,7 @@ function renderToolbar(){
  $('quick-breath').setAttribute('aria-pressed',String(breathMode));
  $('quick-separator').setAttribute('aria-pressed',String(separatorMode));
  const insertionActive=breathMode||separatorMode;
- document.querySelectorAll('#quick-buttons [data-symbol], #symbol-grid [data-symbol]').forEach(b=>{
+ document.querySelectorAll('#quick-buttons [data-symbol], #symbol-grid [data-symbol], #voice-grid [data-symbol]').forEach(b=>{
   b.disabled=insertionActive;
   // The lower symbol grid already has visible captions for these two marks.
   const noTooltip=b.closest('#symbol-grid')&&(b.dataset.symbol==='＜'||b.dataset.symbol==='＞');
@@ -1276,7 +1288,7 @@ function renderSelectionInspector(){
   empty.textContent='この範囲にはまだ注釈がありません';
   box.appendChild(empty);
  }
- const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','〜':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
+ const labels={'↗':'上げる','↘':'下げる','息':'ウィスパー','強':'強調','裏':'裏声','エ':'エッジ','〜':'ロングトーン','〰':'ビブラート','・':'アクセント','＜':'だんだん強く','＞':'だんだん弱く'};
  for(const item of nearby){
   const scope=document.createElement('div');scope.className='scoped-annotation';
   const label=document.createElement('span');label.className='scope-label';
@@ -1366,7 +1378,7 @@ $('selection-annotations').addEventListener('click',event=>{
 
 // v3.10 direct edit: actual saved records stay separate even when visually connected.
 let quickEditRange=null,quickEditAnchor=null;
-const QUICK_SYMBOLS=['↗','↘','息','強','〜','〰','・','＜','＞'];
+const QUICK_SYMBOLS=['↗','↘','息','強','裏','エ','〜','〰','・','＜','＞'];
 function closeQuickEdit(){quickEditRange=null;quickEditAnchor=null;$('quick-edit').hidden=true}
 function quickItems(){
  if(!quickEditRange)return [];
@@ -1408,7 +1420,7 @@ function showQuickEdit(){
       }else{data.marks.splice(pos,1)}
      });
      showQuickEdit();toast('記号を変更しました');
-    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」')+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
+    });applyTone(b,symbol);b.setAttribute('aria-label','この記号を'+(VOICE_TONE_NAMES[symbol]||(symbol==='・'?'アクセント':symbol==='＜'?'だんだん強く':symbol==='＞'?'だんだん弱く':'「'+symbol+'」'))+'に変更');b.setAttribute('aria-pressed',String(symbol===item.symbol));buttons.append(b)
    }
    section.append(buttons)
   }else{
@@ -1490,7 +1502,7 @@ function renderList(){
   header.append(label,actions);row.appendChild(header);
   if(mode==='marks'){
    const tags=document.createElement('div');tags.className='entry-tags';
-   const symbolOrder=['↗','↘','息','強','〜','〰','・','＜','＞'];
+   const symbolOrder=['↗','↘','息','強','裏','エ','〜','〰','・','＜','＞'];
    g.items.filter(item=>item.symbol).slice().sort((a,b)=>symbolOrder.indexOf(a.symbol)-symbolOrder.indexOf(b.symbol)).forEach(item=>{
      const chip=document.createElement('span');chip.className='tag';applyTone(chip,item.symbol);
      const edit=document.createElement('button');edit.type='button';edit.textContent=item.symbol+' ✎';edit.title='この記号を変更';edit.dataset.editId=item.id;
@@ -1610,6 +1622,7 @@ els.lyrics.addEventListener('click',e=>{
  const chip=e.target.closest('[data-range-start]');if(chip){openQuickEdit(Number(chip.dataset.rangeStart),Number(chip.dataset.rangeEnd),chip)}
 });
 $('symbol-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
+$('voice-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('quick-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('breath-toggle').addEventListener('click',()=>toggleInsertMode('breath'));
 $('separator-toggle').addEventListener('click',()=>toggleInsertMode('separator'));
