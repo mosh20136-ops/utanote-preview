@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.23</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.24</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -186,15 +186,16 @@
 .quick-palette{position:sticky;top:0;z-index:30;background:#fffefefa;backdrop-filter:blur(10px);border:1px solid #e4ddf4;border-radius:15px;margin:10px 0;padding:8px 11px;box-shadow:0 8px 18px #40357413;display:flex;gap:9px;align-items:center;justify-content:space-between}
 .quick-palette[hidden]{display:none!important}
 .quick-context{font-size:11px;font-weight:800;color:#65578f;min-width:0;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.quick-buttons{display:flex;gap:5px;overflow-x:auto;flex:1;justify-content:flex-end;padding:2px 0;scrollbar-width:thin}
+.quick-buttons{display:flex;gap:8px;overflow-x:auto;flex:1;min-width:0;justify-content:flex-start;padding:2px 0;scrollbar-width:thin;overscroll-behavior-x:contain}
+.quick-symbol-group{display:flex;gap:5px;align-items:center;flex:0 0 auto;padding-right:8px;border-right:1px solid #e9e2f2}
+.quick-symbol-group:last-child{border-right:0;padding-right:2px}
+.quick-symbol-group-name{font-size:10px;line-height:1.25;font-weight:800;color:#77658f;white-space:nowrap}
+.quick-symbol-group-marks{display:flex;align-items:center;gap:4px}
 .quick-buttons button{display:inline-grid;place-items:center;flex:0 0 auto;min-width:37px;height:35px;border-radius:9px;background:var(--tone-bg,#f4f1ff);border:1px solid var(--tone-line,#e3d8fb);color:var(--tone,#6652ba);font-size:17px;font-weight:850;padding:4px 7px}
 .quick-buttons .quick-insert{background:#eaf7f5;color:#247e77;border-color:#c4e8e2}
 .quick-buttons .quick-insert#quick-separator{background:#fff3e5;color:#9e671e;border-color:#efd8bb}
 .quick-buttons button[aria-pressed=true]{outline:3px solid #bca9ee;outline-offset:0}
-.quick-group-select{flex:0 0 auto;width:clamp(112px,18vw,155px);min-height:35px;border:1px solid #dcd4ef;background:#f7f3ff;border-radius:9px;padding:6px 7px;font-size:12px;font-weight:750;color:#594a8b;cursor:pointer}
-.quick-group-select:focus-visible{outline:2px solid #8066d9;outline-offset:2px}
-#quick-buttons [hidden],#quick-group-select[hidden]{display:none!important}
-@media(max-width:600px){.quick-group-select{width:136px;max-width:45%}}
+/* Each group is labelled in place. Horizontal scrolling keeps all marks accessible. */
 /* v3.13.5: insertion modes are exclusive with range annotations. */
 #quick-buttons button[data-symbol]:disabled,#symbol-grid button[data-symbol]:disabled,#voice-grid button[data-symbol]:disabled,
 #quick-pron-toggle:disabled,#pron-save:disabled,#quick-pron-save:disabled{
@@ -426,7 +427,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.23: section navigation */
+/* v3.14.24: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -566,27 +567,45 @@
   <section class="tutorial" id="tutorial" aria-live="polite" hidden><div class="tutorial-top"><strong id="tutorial-title">1 / 3　歌詞を選択</strong><button type="button" class="link-btn" id="skip-tutorial">スキップ ×</button></div><p id="tutorial-detail">最初の文字と最後の文字を順番にタップ。1文字なら、そのまま記号を選べるよ。</p><div class="tour-bottom"><span class="dots"><i class="dot active"></i><i class="dot"></i><i class="dot"></i></span><span style="font-size:10px;color:#85749a">実際に操作して進めよう</span></div></section>
   <div class="quick-palette" id="quick-palette" aria-label="歌詞を見ながら記号を付ける簡易パレット">
     <span class="quick-context" id="quick-context">文字を2回タップして選択</span>
-    <select id="quick-group-select" class="quick-group-select" aria-label="歌唱記号のグループを選択" title="歌唱記号のグループ">
-      <option value="pitch">抑揚</option>
-      <option value="sustain">音の持続・変化</option>
-      <option value="dynamics">強弱</option>
-      <option value="voice">声色</option>
-      <option value="phrasing">ブレス・フレージング</option>
-    </select>
-    <div class="quick-buttons" id="quick-buttons" aria-label="選択中のグループの記号">
-      <button type="button" data-quick-group="pitch" data-symbol="↗" title="上げる">↗</button>
-      <button type="button" data-quick-group="pitch" data-symbol="↘" title="下げる">↘</button>
-      <button type="button" data-quick-group="sustain" data-symbol="-" title="ロングトーン">-</button>
-      <button type="button" data-quick-group="sustain" data-symbol="〰" title="ビブラート">〰</button>
-      <button type="button" data-quick-group="dynamics" data-symbol="・" title="アクセント">・</button>
-      <button type="button" data-quick-group="dynamics" data-symbol="＜" title="だんだん強く" aria-label="クレッシェンド・だんだん強く">＜</button>
-      <button type="button" data-quick-group="dynamics" data-symbol="＞" title="だんだん弱く" aria-label="デクレッシェンド・だんだん弱く">＞</button>
-      <button type="button" data-quick-group="voice" data-symbol="息" title="ウィスパー">息</button>
-      <button type="button" data-quick-group="voice" data-symbol="強" title="強調">強</button>
-      <button type="button" data-quick-group="voice" data-symbol="裏" title="裏声">裏</button>
-      <button type="button" data-quick-group="voice" data-symbol="エ" title="エッジ">エ</button>
-      <button type="button" class="quick-insert" data-quick-group="phrasing" id="quick-breath" title="ブレス挿入モード">∨</button>
-      <button type="button" class="quick-insert" data-quick-group="phrasing" id="quick-separator" title="区切り挿入モード">/</button>
+    <div class="quick-buttons" id="quick-buttons" aria-label="グループ別の歌唱記号">
+      <div class="quick-symbol-group" role="group" aria-label="抑揚">
+        <span class="quick-symbol-group-name" aria-hidden="true">抑揚</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="↗" title="上げる">↗</button>
+          <button type="button" data-symbol="↘" title="下げる">↘</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="音の持続・変化">
+        <span class="quick-symbol-group-name" aria-hidden="true">音の持続・変化</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="-" title="ロングトーン">-</button>
+          <button type="button" data-symbol="〰" title="ビブラート">〰</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="強弱">
+        <span class="quick-symbol-group-name" aria-hidden="true">強弱</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="・" title="アクセント">・</button>
+          <button type="button" data-symbol="＜" title="だんだん強く" aria-label="クレッシェンド・だんだん強く">＜</button>
+          <button type="button" data-symbol="＞" title="だんだん弱く" aria-label="デクレッシェンド・だんだん弱く">＞</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="声色">
+        <span class="quick-symbol-group-name" aria-hidden="true">声色</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" data-symbol="息" title="ウィスパー">息</button>
+          <button type="button" data-symbol="強" title="強調">強</button>
+          <button type="button" data-symbol="裏" title="裏声">裏</button>
+          <button type="button" data-symbol="エ" title="エッジ">エ</button>
+        </div>
+      </div>
+      <div class="quick-symbol-group" role="group" aria-label="ブレス・フレージング">
+        <span class="quick-symbol-group-name" aria-hidden="true">ブレス・フレージング</span>
+        <div class="quick-symbol-group-marks">
+          <button type="button" class="quick-insert" id="quick-breath" title="ブレス挿入モード">∨</button>
+          <button type="button" class="quick-insert" id="quick-separator" title="区切り挿入モード">/</button>
+        </div>
+      </div>
     </div>
     <button type="button" class="quick-pron-toggle" id="quick-pron-toggle" aria-pressed="false" title="発音の注釈を入力">あ 発音</button>
     <div class="quick-pron-form" id="quick-pron-form" hidden>
@@ -686,9 +705,7 @@ function currentSongLimit(){return PLAN_SONG_LIMITS[ACTIVE_PLAN]}
 function canAddSong(){return songs.length<currentSongLimit()}
 function newSongLimitMessage(){return '無料プランでは'+currentSongLimit()+'曲まで登録できます。既存の曲は引き続き編集できます。'}
 let sectionEditActive=false,sectionPickStart=null,sectionPickEnd=null,sectionPickPhase=0,sectionEditId=null,sectionViewVerse='all',sectionViewLabel='all';
- const QUICK_GROUPS=['pitch','sustain','dynamics','voice','phrasing'];
-let quickGroup='pitch';
-let mode='marks',breathMode=false,separatorMode=false,start=null,end=null,selectionDone=false,editingMark=null,history=[],guideStep=0,guideVisible=false,flashRange=null,toastTimer,pendingMemo=false,pendingPron=false,quickPronOpen=false;
+ let mode='marks',breathMode=false,separatorMode=false,start=null,end=null,selectionDone=false,editingMark=null,history=[],guideStep=0,guideVisible=false,flashRange=null,toastTimer,pendingMemo=false,pendingPron=false,quickPronOpen=false;
 const els={lyrics:$('lyrics'),list:$('entry-list'),status:$('selection-status'),panelMarks:$('marks-panel'),panelMemo:$('memo-panel'),memoInput:$('memo-input'),pronInput:$('pron-input')};
 
 // A single color mapping is shared by the palette, lyric annotations, and edit list.
@@ -1269,16 +1286,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
 }
 function renderStatus(){updateSelectionProgress();if(mode==='marks'&&separatorMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='区切り挿入中：＋をタップして「/」を配置。通常の記号は挿入モードを終了すると選べます。';return}if(mode==='marks'&&breathMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='ブレス挿入中：＋をタップして「∨」を配置。通常の記号は挿入モードを終了すると選べます。';return}const sel=selected();if(editingMark){const mark=data.marks.find(m=>m.id===editingMark);$('edit-message').textContent=mark?'変更中：現在の「'+mark.symbol+'」を、下のボタンで置き換えます。':'';document.querySelector('.selection-bar').classList.toggle('edit-active',!!mark)}else{document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent=''}if(!sel){els.status.textContent='まず歌詞の開始文字をタップしてね。';return}const text=excerpt(sel.start,sel.end);if(!selectionDone){els.status.textContent='「'+text+'」から選択中。終了文字をタップ（1文字ならそのまま記号を選択）';return}els.status.textContent='選択：「'+text+'」  →  下で'+(mode==='marks'?'記号や発音注釈を追加':'メモを入力')}
 function updateSelectionProgress(){const stage=(breathMode||separatorMode)?'breath':start===null?'start':selectionDone?'done':'end';$('select-start-stage').classList.toggle('active',stage==='start');$('select-end-stage').classList.toggle('active',stage==='end');$('select-done-stage').classList.toggle('active',stage==='done');$('selection-progress').hidden=stage==='breath'||sectionEditActive}
-function renderQuickGroup(){
- const selector=$('quick-group-select');
- selector.hidden=mode!=='marks';
- selector.value=quickGroup;
- $('quick-buttons').querySelectorAll('[data-quick-group]').forEach(button=>{
-  button.hidden=button.dataset.quickGroup!==quickGroup;
- });
-}
 function renderToolbar(){
- renderQuickGroup();
  $('breath-toggle').setAttribute('aria-pressed',String(breathMode));
  $('breath-toggle').textContent=breathMode?'✓ ブレス挿入を終了':'＋ ブレスを挿入';
  $('separator-toggle').setAttribute('aria-pressed',String(separatorMode));
@@ -1667,14 +1675,7 @@ els.lyrics.addEventListener('click',e=>{
 });
 $('symbol-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('voice-grid').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
-$('quick-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b&&!b.hidden)addMark(b.dataset.symbol)});
-$('quick-group-select').addEventListener('change',e=>{
- const group=e.target.value;
- if(!QUICK_GROUPS.includes(group))return;
- quickGroup=group;
- if(group!=='phrasing'&&(breathMode||separatorMode)){breathMode=false;separatorMode=false}
- render();
-});
+$('quick-buttons').addEventListener('click',e=>{const b=e.target.closest('[data-symbol]');if(b)addMark(b.dataset.symbol)});
 $('breath-toggle').addEventListener('click',()=>toggleInsertMode('breath'));
 $('separator-toggle').addEventListener('click',()=>toggleInsertMode('separator'));
 $('quick-breath').addEventListener('click',()=>toggleInsertMode('breath'));
