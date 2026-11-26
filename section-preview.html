@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.18</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.19</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -413,12 +413,13 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.18: section navigation */
+/* v3.14.19: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
 .section-tab{background:#fff;border:1px solid #e5def2;border-radius:10px;padding:7px 12px;font-size:12px;font-weight:750;color:#6e628b}
 .section-tab[aria-current="true"]{background:#7058d7;color:#fff;border-color:#7058d7}
+.section-filter-empty{padding:22px 12px;color:#726586;font-size:13px;text-align:center}
 .section-nav-empty{font-size:11px;color:#9289a4}
 .section-setup{padding:10px 18px 12px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 /* Sticky section controls use the original workspace scroll context. */
@@ -910,7 +911,7 @@ function renderSectionNavigation(target){
  if(target.id==='editor-section-nav')target.hidden=false;
  target.replaceChildren();
  const all=data.sections||[],verses=[...new Set(all.map(x=>x.verse))];
- if(sectionViewVerse!=='all'&&!verses.includes(sectionViewVerse)){sectionViewVerse='all';sectionViewLabel='all'}
+ if(sectionViewVerse!=='all'&&!verses.includes(sectionViewVerse))sectionViewVerse='all';
  function row(label,values,key,selected){
    const wrap=document.createElement('div');wrap.className='section-nav-row';
    const caption=document.createElement('span');caption.className='section-nav-caption';caption.textContent=label;wrap.appendChild(caption);
@@ -922,18 +923,17 @@ function renderSectionNavigation(target){
    target.appendChild(wrap);
  }
  row('歌詞',['all',...verses],'sectionVerse',sectionViewVerse);
- const labels=[...new Set(all.filter(x=>sectionViewVerse==='all'||x.verse===sectionViewVerse).map(x=>x.label))];
- if(sectionViewLabel!=='all'&&!labels.includes(sectionViewLabel))sectionViewLabel='all';
- if(labels.length){
-   row('構成',['all',...labels],'sectionLabel',sectionViewLabel);
- }else if(!all.length){
+ // Keep all four section choices visible, even before the user has registered them.
+ const labels=[...new Set([...SECTION_LABELS,...all.map(x=>x.label)])];
+ row('構成',['all',...labels],'sectionLabel',sectionViewLabel);
+ if(!all.length){
    const hint=document.createElement('div');hint.className='section-nav-empty';
-   hint.textContent='セクションは未設定です。歌詞全体を表示しています。';target.appendChild(hint);
+   hint.textContent='セクションはまだ未設定です。メロを選ぶと、該当する行だけが表示されます。';target.appendChild(hint);
  }
 }
 function selectSectionTab(e){
  const b=e.target.closest('button');if(!b)return;
- if(b.dataset.sectionVerse!==undefined){sectionViewVerse=b.dataset.sectionVerse;sectionViewLabel='all'}
+ if(b.dataset.sectionVerse!==undefined)sectionViewVerse=b.dataset.sectionVerse
  else if(b.dataset.sectionLabel!==undefined)sectionViewLabel=b.dataset.sectionLabel;
  else return;
  flushNoteDrafts(false);start=null;end=null;selectionDone=false;
@@ -1188,6 +1188,12 @@ function renderLyrics(target=els.lyrics,readOnly=false){
    }
    previous=sec?.id||null;
  });
+ if((sectionViewVerse!=='all'||sectionViewLabel!=='all')&&!rows.some(row=>!row.line.hidden)){
+   const empty=document.createElement('div');empty.className='section-filter-empty';
+   empty.setAttribute('role','status');
+   empty.textContent='該当するセクションはありません。「すべて」または「全体」で表示を切り替えてください。';
+   target.appendChild(empty);
+ }
  if(flashRange)flashRange=null
 }
 function renderStatus(){updateSelectionProgress();if(mode==='marks'&&separatorMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='区切り挿入中：＋をタップして「/」を配置。通常の記号は挿入モードを終了すると選べます。';return}if(mode==='marks'&&breathMode){document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent='';els.status.textContent='ブレス挿入中：＋をタップして「∨」を配置。通常の記号は挿入モードを終了すると選べます。';return}const sel=selected();if(editingMark){const mark=data.marks.find(m=>m.id===editingMark);$('edit-message').textContent=mark?'変更中：現在の「'+mark.symbol+'」を、下のボタンで置き換えます。':'';document.querySelector('.selection-bar').classList.toggle('edit-active',!!mark)}else{document.querySelector('.selection-bar').classList.remove('edit-active');$('edit-message').textContent=''}if(!sel){els.status.textContent='まず歌詞の開始文字をタップしてね。';return}const text=excerpt(sel.start,sel.end);if(!selectionDone){els.status.textContent='「'+text+'」から選択中。終了文字をタップ（1文字ならそのまま記号を選択）';return}els.status.textContent='選択：「'+text+'」  →  下で'+(mode==='marks'?'記号や発音注釈を追加':'メモを入力')}
