@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f6f4ff">
-<title>UtaBloom（仮称）｜歌唱ノート v3.14.16</title>
+<title>UtaBloom（仮称）｜歌唱ノート v3.14.17</title>
 <meta name="description" content="UtaBloom（仮称）- Sing Your Song. 歌詞に歌い方・発音・解釈を記録し、自分らしい歌唱表現を育てる歌唱ノート。">
 <meta name="application-name" content="UtaBloom">
 <meta name="apple-mobile-web-app-title" content="UtaBloom">
@@ -413,7 +413,7 @@
 .inline-annotation.single-glyph.accent-only .mark-glyph{font-size:15px;min-height:18px;line-height:1;padding:0}
 .inline-annotation.pron-only{min-height:19px}
 
-/* v3.14.16: section navigation */
+/* v3.14.17: section navigation */
 .section-navigation{padding:12px 18px 8px;border-bottom:1px solid #eee9f7;background:#fdfcff}
 .section-navigation .section-nav-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 8px}
 .section-nav-caption{font-size:11px;font-weight:750;color:#8c81a3;min-width:55px}
@@ -579,7 +579,7 @@
      <div class="section-setup">
        <button type="button" id="section-config-toggle" class="section-setup-toggle" aria-expanded="false">＋ セクションを設定</button>
        <div class="section-config-body" id="section-config-body" hidden>
-         <p>歌詞の行番号をタップして範囲を選択します。登録済みのセクション名から直接編集でき、既存範囲への上書きも可能です。</p>
+         <p>上の「番・構成」タブで表示を切り替えながら、歌詞の行番号をタップして範囲を選択します。登録済みのセクション名から直接編集でき、既存範囲への上書きも可能です。</p>
          <div class="section-config-inputs">
            <label for="section-verse-input">何番<select id="section-verse-input"><option value="1番">1番</option><option value="2番">2番</option><option value="3番">3番</option><option value="4番">4番</option><option value="5番">5番</option><option value="6番">6番</option><option value="7番">7番</option><option value="8番">8番</option><option value="9番">9番</option><option value="10番">10番</option></select></label>
          <label for="section-label-input">セクション<select id="section-label-input"><option value="Aメロ">Aメロ</option><option value="Bメロ">Bメロ</option><option value="Cメロ">Cメロ</option><option value="サビ">サビ</option></select></label>
@@ -848,7 +848,7 @@ function resetSectionSelection(){
 }
 function toggleSectionConfig(){
  flushNoteDrafts(false);sectionEditActive=!sectionEditActive;
- if(sectionEditActive){sectionViewVerse='all';sectionViewLabel='all';start=null;end=null;selectionDone=false}
+ if(sectionEditActive){start=null;end=null;selectionDone=false}
  else{sectionPickStart=null;sectionPickEnd=null;sectionPickPhase=0;sectionEditId=null}
  $('section-config-body').hidden=!sectionEditActive;
  $('editor-view').querySelector('.workspace').classList.toggle('section-editing',sectionEditActive);
@@ -907,7 +907,7 @@ function renderSectionSetup(){
 }
 function renderSectionNavigation(target){
  if(!target)return;
- if(target.id==='editor-section-nav')target.hidden=sectionEditActive;
+ if(target.id==='editor-section-nav')target.hidden=false;
  target.replaceChildren();
  const all=data.sections||[],verses=[...new Set(all.map(x=>x.verse))];
  if(sectionViewVerse!=='all'&&!verses.includes(sectionViewVerse)){sectionViewVerse='all';sectionViewLabel='all'}
@@ -1177,7 +1177,7 @@ function renderLyrics(target=els.lyrics,readOnly=false){
  let previous=null;
  rows.forEach((row,i)=>{
    const sec=(data.sections||[]).find(x=>i>=x.startLine&&i<=x.endLine);
-   const visible=sectionEditActive||sectionViewVerse==='all'||
+   const visible=sectionViewVerse==='all'||
       (!!sec&&sec.verse===sectionViewVerse&&(sectionViewLabel==='all'||sec.label===sectionViewLabel));
    row.line.hidden=!visible;
    if(!visible){previous=null;return}
